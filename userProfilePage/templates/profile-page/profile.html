@@ -1,0 +1,197 @@
+{% extends 'user-home/base.html' %}
+{% load static %}
+{% block title %}DROPCOM Profile{% endblock %}
+{% block content %}
+
+<style>
+    section {
+        min-height: 100vh !important;
+    }
+
+    a.text-muted div:hover {
+        color: black;
+    }
+</style>
+
+<section>
+    <div class="container py-5">
+        <div class="row">
+            <div class="col-lg-4">
+                <div class="card mb-4">
+                    <div class="card-body text-center">
+                        <img src="{% static 'images/profile.jpg' %}" alt="avatar" class="rounded-circle img-fluid"
+                            style="width: 150px;">
+                        <h5 class="my-3">{{user.user.username}}</h5>
+                        <p class="text-muted mb-1">{{user.user.email}}</p>
+                        <p class="text-muted mb-1">Ph : {{user.phone_number}}</p>
+                        <a aria-current="true" data-bs-toggle="modal" data-bs-target="#editPass{{user.id}}"
+                            class="text-primary" style="cursor: pointer;">change
+                            password <i class="fa-solid fa-pen-to-square ms-2"></i></a>
+                        {% if user.invited_user %}
+                        <p class="text-muted mb-1">Invited by : {{user.invited_user}}</p>
+                        {% endif %}
+                        <div class="d-flex justify-content-center mb-2 mt-4">
+                            <a href="{% url 'userCoins' %}" type="button" class="btn btn-dark rounded-pill">coins :
+                                {{user.coins}}<i class="fa-solid fa-angle-right ms-2"></i></a>
+                            <a href="{% url 'userWallet' %}" type="button" class="btn btn-dark rounded-pill ms-1">wallet
+                                :
+                                {{user.wallet}}<i class="fa-solid fa-angle-right ms-2"></i></a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="col-lg-4">
+                <div class="card mb-4">
+                    <div class="card-body">
+                        <a href="{% url 'referAndEarn' %}" class="text-muted">
+                            <div class="row">
+                                <div class="col-10 h6 text-uppercase"><i
+                                        class="fas fa-regular fa-users fa-lg mx-2"></i>invite and earn</div>
+                                <div class="col-2"><i class="fa-solid fa-angle-right"></i></div>
+                            </div>
+                        </a>
+                        <hr>
+
+                        <a href="play-and-earn-rewards" class="text-muted">
+                            <div class="row">
+                                <div class="col-10 h6 text-uppercase"><i class="fa-solid fa-gamepad fa-lg mx-2"></i>play
+                                    and earn rewards</div>
+                                <div class="col-2"><i class="fa-solid fa-angle-right"></i></div>
+                            </div>
+                        </a>
+                        <hr>
+
+                        <a href="{% url 'user_orders' %}" class="text-muted">
+                            <div class="row">
+                                <div class="col-10 h6 text-uppercase"><i
+                                        class="fa-solid fa-bag-shopping fa-lg mx-2"></i>my orders</div>
+                                <div class="col-2"><i class="fa-solid fa-angle-right"></i></div>
+                            </div>
+                        </a>
+                        <hr>
+
+                        <a class="text-muted" data-mdb-toggle="collapse" href="#collapseExample" role="button"
+                            aria-expanded="false" aria-controls="collapseExample">
+                            <div class="row">
+                                <div class="col-10 h6 text-uppercase"><i
+                                        class="fa-solid fa-building-columns fa-lg mx-2"></i>Add Bank Account</div>
+                                <div class="col-2"><i class="fa-solid fa-angle-right"></i></div>
+                            </div>
+                        </a>
+                        <div class="collapse mt-3" id="collapseExample">
+                            <div class="card p-0 m-0">
+                                {% if bank %}
+                                <div class="card-body">
+                                    <div class="d-flex flex-row pb-3">
+                                        <div class="d-flex align-items-center pe-2">
+                                            <input class="form-check-input" type="radio" name="radioNoLabel"
+                                                id="radioNoLabel1" value="" aria-label="..." checked />
+                                        </div>
+                                        <div class="rounded border w-100 p-3 align-items-center">
+                                            <p class="small fw-lighter">
+                                                acc holder name : <span
+                                                    class="fw-bold">{{bank.account_holder_name}}</span><br>
+                                                acc number : <span class="fw-bold">{{bank.account_number}}</span><br>
+                                                Ifsc code : <span class="fw-bold">{{bank.IFSC_code}}</span><br>
+                                                bank name : <span class="fw-bold">{{bank.bank_name}}</span><br>
+                                                branch : <span class="fw-bold">{{bank.bank_branch}}</span>
+                                            </p>
+                                            <a href="{% url 'editBankAcc' %}" class="btn"><i
+                                                    class="fa-sharp fa-solid fa-pen-to-square me-2"></i>edit</a>
+                                        </div>
+                                    </div>
+                                </div>
+                                {% else %}
+                                <div class="card-body text-center">
+                                    <a href="{% url 'addBankAcc' %}" class="h6">Add Bank Account +</a>
+                                </div>
+                                {% endif %}
+                            </div>
+                        </div>
+                        <hr>
+
+                        <a href="{% url 'userWallet' %}" class="text-muted">
+                            <div class="row">
+                                <div class="col-10 h6 text-uppercase"><i
+                                        class="fa-regular fa-credit-card fa-lg mx-2"></i>withdraw</div>
+                                <div class="col-2"><i class="fa-solid fa-angle-right"></i></div>
+                            </div>
+                        </a>
+                        <hr>
+
+                        <a href="{% url 'contactUs' %}" class="text-muted">
+                            <div class="row">
+                                <div class="col-10 h6 text-uppercase"><i
+                                        class="fa-solid fa-headphones fa-lg mx-2"></i>Contact us</div>
+                                <div class="col-2"><i class="fa-solid fa-angle-right"></i></div>
+                            </div>
+                        </a>
+                        <hr>
+
+                        <a href="{% url 'about_us' %}" class="text-muted">
+                            <div class="row">
+                                <div class="col-10 h6 text-uppercase"><i class="fa-solid fa-info fa-lg mx-2"></i>About
+                                    us</div>
+                                <div class="col-2"><i class="fa-solid fa-angle-right"></i></div>
+                            </div>
+                        </a>
+                        <hr>
+
+                        <a href="{% url 'logout' %}" class="text-muted">
+                            <div class="row">
+                                <div class="col-10 h6 text-uppercase"><i
+                                        class="fa-solid fa-right-from-bracket fa-lg mx-2"></i>logout</div>
+                                <div class="col-2"><i class="fa-solid fa-angle-right"></i></div>
+                            </div>
+                        </a>
+
+                    </div>
+                </div>
+            </div>
+        </div>
+        {% if messages %}
+        {% for message in messages %}
+        <div class="position-fixed top-0 end-0 mb-4 my-3 w-100" id="alertMessages" style="max-width: 30rem;">
+            <div class="alert alert-dismissible fade show text-center {% if message.tags == 'error' %}alert-danger{% else %}alert-success{% endif %}"
+                role="alert">
+                <h6>{{message}}</h6>
+            </div>
+        </div>
+        {% endfor %}
+        {% endif %}
+
+        <div class="modal fade" id="editPass{{user.id}}" tabindex="-1" aria-labelledby="exampleModalLabel"
+            aria-hidden="true">
+            <div class="modal-dialog modal-dialog-centered">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h5 class="modal-title" id="exampleModalLabel">Change Password</h5>
+                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                    </div>
+                    <div class="modal-body">
+                        <form action="{% url 'change_passsword' user_id=user.user.id %}" method="POST">
+                            {% csrf_token %}
+                            <div class="form-outline mb-3">
+                                <input type="password" id="password" class="form-control" name="new_password"
+                                    required />
+                                <label class="form-label text-black" for="password">enter new password</label>
+                            </div>
+                            <div class="modal-footer">
+                                <input type="submit" class="btn btn-info btn-sm ">
+                            </div>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+<script>
+    setTimeout(function () {
+        var alertBox = document.getElementById("alertMessages");
+        alertBox.style.display = "none";
+    }, 3000);
+</script>
+
+{% endblock %}

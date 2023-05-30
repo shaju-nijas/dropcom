@@ -1,0 +1,149 @@
+{% extends 'admin-page/base.html' %}
+{% block content %}
+<div class="card">
+    <div class="card-body" style="max-width: 100%;overflow-x: scroll;">
+        <table class="table table-striped table-hover">
+            <thead class="table-secondary">
+                <tr>
+                    <th>sl.no</th>
+                    <th>user</th>
+                    <th>req amount</th>
+                    <th>wallet</th>
+                    <th>total earnings</th>
+                    <th>refunded amount</th>
+                    <th></th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for withdraw , bank , users in datas %}
+                <tr>
+                    <td>{{forloop.counter}}</td>
+                    <td>{{withdraw.user.username}}</td>
+                    <td>Rs. {{withdraw.withdraw_requested_amount}}</td>
+                    <td>{{users.wallet}}</td>
+                    <td>{{users.total_earnings}}</td>
+                    <td>{{users.refunded_amount}}</td>
+                    <td><button class="btn btn-secondary" data-mdb-toggle="modal"
+                            data-mdb-target="#exampleModal{{withdraw.id}}">PAY</button></td>
+                </tr>
+                <!-- Modal -->
+                <div class="modal fade" id="exampleModal{{withdraw.id}}" tabindex="-1"
+                    aria-labelledby="exampleModalLabel" aria-hidden="true">
+                    <div class="modal-dialog modal-dialog-centered">
+                        <div class="modal-content">
+                            <div class="modal-header">
+                                <h5 class="modal-title" id="exampleModalLabel">Payment to {{users.user.username}}</h5>
+                                <button type="button" class="btn-close" data-mdb-dismiss="modal"
+                                    aria-label="Close"></button>
+                            </div>
+                            <div class="modal-body">
+                                <div class="row">
+                                    <div class="col-lg-6">
+                                        <ul class="list-group list-group-light list-group-small">
+                                            <li class="list-group-item">req amount : <span
+                                                    class="fw-bold">{{withdraw.withdraw_requested_amount}}</span></li>
+                                            <li class="list-group-item">total earnings : <span
+                                                    class="fw-bold">{{users.total_earnings}}</span></li>
+                                            <li class="list-group-item">wallet : <span
+                                                    class="fw-bold">{{users.wallet}}</span></li>
+                                            <li class="list-group-item">refunded amount : <span
+                                                    class="fw-bold">{{users.refunded_amount}}</span></li>
+                                            <li class="list-group-item">level 1 : <span
+                                                    class="fw-bold">{{users.level_1_count}} -- (rs.
+                                                    {{users.level_1_earnings}})</span></li>
+                                            <li class="list-group-item">level 1 : <span
+                                                    class="fw-bold">{{users.level_2_count}} -- (rs.
+                                                    {{users.level_2_earnings}})</span></li>
+                                            <li class="list-group-item">level 1 : <span
+                                                    class="fw-bold">{{users.level_3_count}} -- (rs.
+                                                    {{users.level_3_earnings}})</span></li>
+                                            <li class="list-group-item">level 1 : <span
+                                                    class="fw-bold">{{users.level_4_count}} -- (rs.
+                                                    {{users.level_4_earnings}})</span></li>
+                                            <li class="list-group-item">level 1 : <span
+                                                    class="fw-bold">{{users.level_5_count}} -- (rs.
+                                                    {{users.level_5_earnings}})</span></li>
+                                            <li class="list-group-item">level 1 : <span
+                                                    class="fw-bold">{{users.level_6_count}} -- (rs.
+                                                    {{users.level_6_earnings}})</span></li>
+                                            <li class="list-group-item">level 1 : <span
+                                                    class="fw-bold">{{users.level_7_count}} -- (rs.
+                                                    {{users.level_7_earnings}})</span></li>
+                                        </ul>
+                                    </div>
+                                    <div class="col-lg-6">
+                                        <ul class="list-group list-group-light">
+                                            <li
+                                                class="list-group-item d-flex justify-content-between align-items-start">
+                                                <div class="ms-2 me-auto">
+                                                    <div class="fw-bold">Acc holder name</div>
+                                                    {{bank.account_holder_name}}
+                                                </div>
+                                            </li>
+                                            <li
+                                                class="list-group-item d-flex justify-content-between align-items-start">
+                                                <div class="ms-2 me-auto">
+                                                    <div class="fw-bold">Acc Number</div>
+                                                    {{bank.account_number}}
+                                                </div>
+                                            </li>
+                                            <li
+                                                class="list-group-item d-flex justify-content-between align-items-start">
+                                                <div class="ms-2 me-auto">
+                                                    <div class="fw-bold">IFSC code</div>
+                                                    {{bank.IFSC_code}}
+                                                </div>
+                                            </li>
+                                            <li
+                                                class="list-group-item d-flex justify-content-between align-items-start">
+                                                <div class="ms-2 me-auto">
+                                                    <div class="fw-bold">Bank name</div>
+                                                    {{bank.bank_name}}
+                                                </div>
+                                            </li>
+                                            <li
+                                                class="list-group-item d-flex justify-content-between align-items-start">
+                                                <div class="ms-2 me-auto">
+                                                    <div class="fw-bold">Bank branch</div>
+                                                    {{bank.bank_branch}}
+                                                </div>
+                                            </li>
+                                        </ul>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="modal-footer">
+                                <button type="button" class="btn btn-secondary" data-mdb-dismiss="modal">cancel</button>
+                                <a href="{% url 'withdrawelPayedByAdmin' withdraw.user.id %}"
+                                    class="btn btn-primary">payed</a>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                {% endfor %}
+            </tbody>
+        </table>
+    </div>
+</div>
+
+{% if messages %}
+{% for message in messages %}
+<div class="position-fixed bottom-0 end-0 mb-4 mx-3 w-100" id="alertMessages" style="max-width: 30rem;animation: slideTop .5s ease forwards;">
+    <div class="alert alert-success alert-dismissible fade show text-center" role="alert">
+        <h6>{{message}}</h6>
+    </div>
+</div>
+{% endfor %}
+{% endif %}
+<script>
+    var withdrawReq = document.getElementById('withdrawReq');
+    withdrawReq.classList.add('active')
+
+
+    setTimeout(function () {
+        var alertBox = document.getElementById("alertMessages");
+        alertBox.style.display = "none";
+    }, 3000);
+
+</script>
+{% endblock %}

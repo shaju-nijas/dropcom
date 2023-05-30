@@ -1,0 +1,142 @@
+{% extends 'user-home/base.html' %}
+{% block title %}DROPCOM refer and earn{% endblock %}
+{% block content %}
+
+<style>
+    section {
+        min-height: 100vh !important;
+        font-family: sans-serif;
+    }
+</style>
+
+<section class="mb-3 mb-lg-5">
+    <div class="container px-lg-5 pt-lg-5">
+        <div class="h2 fw-bold text-primary my-3">Refer & Earn</div>
+        <div class="h6 text-primary">DROPCOM Refer & Earn Programme</div>
+        <div class="p text-dark fw-bold">Refer your friends and earn unlimited amount</div>
+    </div>
+    <div class="container px-lg-5 py-3">
+        <div class="card">
+            <div class="card-body text-center">
+                <p>link: <span class="fw-bold" id="link">dropcom.in/accounts/</span><button class="btn ms-3"
+                        id="copy_link">copy</button></p>
+                <p>Referral code: <span class="fw-bold" id="referral_id">{{user.referral_id}}</span><button
+                        class="btn ms-3 " id="copy_referral_id">copy</button></p>
+            </div>
+        </div>
+    </div>
+    <div class="container px-lg-5">
+        <div class="row">
+            <div class="col-lg-5 order-lg-1">
+                <table class="table table-bordered text-center">
+                    <tr>
+                        <th colspan="3" class="fw-bold text-primary">Dashboard</th>
+                    </tr> 
+                    <tr>
+                        <th class="fw-bold">levels</th>
+                        <th class="fw-bold">user</th>
+                        <th class="fw-bold">reward (rs)</th>
+                    </tr>
+                    <tr>
+                        <td>level 1</td>
+                        <td><i class="fa-solid fa-users me-2"></i>{{user.level_1_count}}</td>
+                        <td>{{user.level_1_earnings}}</td>
+                    </tr>
+                    <tr>
+                        <td>level 2</td>
+                        <td><i class="fa-solid fa-users me-2"></i>{{user.level_2_count}}</td>
+                        <td>{{user.level_2_earnings}}</td>
+                    </tr>
+                    <tr>
+                        <td>level 3</td>
+                        <td><i class="fa-solid fa-users me-2"></i>{{user.level_3_count}}</td>
+                        <td>{{user.level_3_earnings}}</td>
+                    </tr>
+                    <tr>
+                        <td>level 4</td>
+                        <td><i class="fa-solid fa-users me-2"></i>{{user.level_4_count}}</td>
+                        <td>{{user.level_4_earnings}}</td>
+                    </tr>
+                    <tr>
+                        <td>level 5</td>
+                        <td><i class="fa-solid fa-users me-2"></i>{{user.level_5_count}}</td>
+                        <td>{{user.level_5_earnings}}</td>
+                    </tr>
+                    <tr>
+                        <td>level 6</td>
+                        <td><i class="fa-solid fa-users me-2"></i>{{user.level_6_count}}</td>
+                        <td>{{user.level_6_earnings}}</td>
+                    </tr>
+                    <tr>
+                        <td>level 7</td>
+                        <td><i class="fa-solid fa-users me-2"></i>{{user.level_7_count}}</td>
+                        <td>{{user.level_7_earnings}}</td>
+                    </tr>
+                </table>
+            </div>
+            <div class="col-lg-7 order-lg-0">
+                <div class="h6 fw-bold text-primary my-lg-3 mt-3 mb-2">How it works:</div>
+                <div class="p"><span class="fw-bold me-2">-</span>Share link and referral code to your friends via
+                    (Whatsapp , SMS ,Gmail , etc..)</div>
+                <div class="p"><span class="fw-bold me-2">-</span>You friend need to register with your referral code .(
+                    put this {{user.referral_id}} code in referral code section and register )</div>
+                <div class="p"><span class="fw-bold me-2">-</span>After register need to buy our subscription plan to
+                    complete the registration process</div>
+                <div class="p"><span class="fw-bold me-2">-</span>When your friend complete the registration you will
+                    get Rs.30 instant to your wallet. ( you can withdraw it to your bank account at any time )</div>
+                <div class="h6 fw-bold text-dark mt-lg-3 mb-lg-1 mt-3 mb-1">More features of refer & earn programme :
+                </div>
+                <div class="p fw-semi-bold">Here you have 7 level referal income</div>
+                <div class="p"><span class="fw-bold me-2">-</span>
+                    Your direct referrals are level 1 referrals and you will get Rs.30 for each refer.
+                </div>
+                <div class="p fw-semi-bold"><span class="fw-bold me-2">-</span>
+                    You will get 100 rs bonus reward when your level 1 referrals get 10 users
+                </div>
+                <div class="p"><span class="fw-bold me-2">-</span>
+                    users referred by your level 1 referrals are your level 2 referrals and for each referral you will
+                    earn rs.20.
+                </div>
+                <div class="p"><span class="fw-bold me-2">-</span>
+                    users referred by your level 2 referrals are your level 3 referrals and for each referral you will
+                    earn rs.10.</div>
+                <div class="p"><span class="fw-bold me-2">-</span>users referred by your level 3 referrals are your
+                    level 4 referrals and for each referral you will earn rs.5.</div>
+                <div class="p"><span class="fw-bold me-2">-</span>In this way, there is level up to 7 , each refer will get rs.5 .</div>
+                <div class="p"><span class="fw-bold me-2">-</span>There is no limit to refer at any level.</div>
+            </div>
+        </div>
+    </div>
+</section>
+
+
+<script>
+    document.getElementById("copy_referral_id").addEventListener("click", copy_refer_id);
+
+    function copy_refer_id() {
+        var copyText = document.getElementById("referral_id");
+        var textArea = document.createElement("textarea");
+        var button = document.getElementById("copy_referral_id");
+        textArea.value = copyText.textContent;
+        document.body.appendChild(textArea);
+        textArea.select();
+        document.execCommand("Copy");
+        textArea.remove();
+        button.innerHTML = "copied";
+    }
+
+    document.getElementById("copy_link").addEventListener("click", copy_link);
+    function copy_link() {
+        var copyText = document.getElementById("link");
+        var textArea = document.createElement("textarea");
+        var button = document.getElementById("copy_link");
+        textArea.value = copyText.textContent;
+        document.body.appendChild(textArea);
+        textArea.select();
+        document.execCommand("Copy");
+        textArea.remove();
+        button.innerHTML = "copied";
+    }
+</script>
+
+{% endblock %}

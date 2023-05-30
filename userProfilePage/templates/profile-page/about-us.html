@@ -1,0 +1,27 @@
+{% extends 'user-home/base.html' %}
+{% block title %}DROPCOM About us{% endblock %}
+{% block content %}
+<section class="container" style="min-height: 100vh;">
+    <div class="px-lg-5 my-lg-5 my-4"></div>
+    <h2 class="text-primary">About Us!</h2>
+    <h3 style="text-align: center;">Welcome To <span id="W_Name1">dropcom</span></h3>
+    <p><span id="W_Name2">dropcom</span> is a Professional <span id="W_Type1">eCommerce</span> Platform. Here we will
+        provide you only interesting content, which you will like very much. We're dedicated to providing you the best
+        of
+        <span id="W_Type2">eCommerce</span>, with a focus on dependability and <span id="W_Spec">Earning money by refer
+            and
+            buy products with discounted price</span>. We're working to turn our passion for eCommerce into a booming online website. We hope you enjoy our eCommerce as much as we enjoy offering them to you.
+    </p>
+    <p>I will keep posting more important posts on my Website for all of you. Please give your support and love.</p>
+    <p style="font-weight: bold; text-align: center;">Thanks For Visiting Our Site<br><br>
+        <span class="text-primary" style=" font-size: 16px; font-weight: bold; text-align: center;">Have a nice day!</span>
+    </p>
+    <hr>
+    <h5>Information</h5>
+        <p class="small my-0"><a href="{% url 'termsAndConditions' %}" class="text-reset small">terms and conditions</a></p>
+        <p class="small my-0"><a href="{% url 'privacy_policy' %}" class="text-reset small">privacy policy</a></p>
+        <p class="small my-0"><a href="{% url 'cancellationAndRefund' %}" class="text-reset small">return / cancellation
+                policy</a></p>
+</section>
+
+{% endblock %}

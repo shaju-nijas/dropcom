@@ -1,0 +1,126 @@
+{% extends 'user-home/base.html' %}
+{% block title %}DROPCOM Add Bank Account{% endblock %}
+{% block content %}
+
+<style>
+    .gradient-custom {
+        min-height: 100vh;
+        background: -webkit-linear-gradient(left, #3931af, #00c6ff);
+    }
+
+    .card-custom {
+        border-bottom-left-radius: 10% 50%;
+        border-top-left-radius: 10% 50%;
+        background-color: #f8f9fa;
+    }
+
+
+    .input-custom {
+        background-color: white;
+    }
+
+    .white-text {
+        color: hsl(52, 0%, 98%);
+        font-weight: 100;
+        font-size: 14px;
+    }
+
+    .back-button {
+        background-color: hsl(52, 0%, 98%);
+        font-weight: 700;
+        color: black;
+        margin-top: 50px;
+    }
+</style>
+
+<div class="gradient-custom py-5">
+    <div class="row mx-3 my-lg-5">
+        <div class="col-md-3">
+            <div style="margin-top: 50px; margin-left: 10px;" class="text-center">
+                <i id="animationDemo" data-mdb-animation="slide-right" data-mdb-toggle="animation"
+                    data-mdb-animation-reset="true" data-mdb-animation-start="onScroll"
+                    data-mdb-animation-on-scroll="repeat" class="fas fa-3x fa-building-columns text-white"></i>
+                <h3 class="mt-3 text-white">Add Bank Account</h3>
+                
+            </div>
+            <div class="text-center">
+                <button type="submit" class="btn btn-white btn-rounded back-button mb-3" onclick="goBack()">Go back</button>
+            </div>
+        </div>
+        <div class="col-md-9 justify-content-center">
+            <div class="card card-custom pb-4">
+                <div class="card-body mt-0 mx-5">
+                    <div class="text-center mb-3 pb-2 mt-3">
+                        {% if editAccount == "Yes" %}
+                        <h4 style="color: #495057 ;">Edit Account Details</h4>
+                        {% else %}
+                        <h4 style="color: #495057 ;">Account Details</h4>
+                        {% endif %}
+                    </div>
+
+                    <form class="mb-0" action="" method="POST">
+                        {% csrf_token %}
+
+                        <div class="row mb-4">
+                            <div class="col-12 mb-4">
+                                <div class="form-outline">
+                                    <input type="text" id="form9Example1" class="form-control input-custom" name="account_holder_name"
+                                        required />
+                                    <label class="form-label" for="form9Example1">account holder name</label>
+                                </div>
+                            </div>
+                            <div class="col-lg-6 mb-4">
+                                <div class="form-outline">
+                                    <input type="text" id="form9Example2" class="form-control input-custom"
+                                        name="account_number" required />
+                                    <label class="form-label" for="form9Example2">bank account number</label>
+                                </div>
+                            </div>
+                            <div class="col-lg-6 mb-4">
+                                <div class="form-outline">
+                                    <input type="text" id="form9Example2" class="form-control input-custom"
+                                        name="IFSC_code" required />
+                                    <label class="form-label" for="form9Example2">IFSC code</label>
+                                </div>
+                            </div>
+                            <div class="col-lg-6 mb-4">
+                                <div class="form-outline">
+                                    <input type="text" id="form9Example2" class="form-control input-custom" name="bank_name"
+                                        required />
+                                    <label class="form-label" for="form9Example2">bank name</label>
+                                </div>
+                            </div>
+                            <div class="col-lg-6 mb-4">
+                                <div class="form-outline">
+                                    <input type="text" id="form9Example2" class="form-control input-custom" name="bank_branch"
+                                        required />
+                                    <label class="form-label" for="form9Example2">bank branch</label>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="float-end ">
+                            <!-- Submit button -->
+                            <button type="submit" class="btn btn-primary btn-rounded"
+                                style="background-color: #0062CC ;">
+                                {% if editAccount == "Yes" %}
+                                Edit account
+                                {% else %}
+                                Add Account
+                                {% endif %}
+                            </button>
+                        </div>
+
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script>
+    function goBack(){
+        window.history.back()
+    }
+</script>
+{% endblock %}

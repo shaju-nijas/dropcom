@@ -1,0 +1,657 @@
+{% extends 'user-home/base.html' %}
+{% block title %}my orders{% endblock %}
+{% block content %}
+<!--<h1>Order Details</h1>
+<p>Order Number: {{ order.id }}</p>
+<p>Order Date: {{ order.start_date }}</p>
+<p>Order Status: {% if order.ordered %}Confirmed{% else %}Pending{% endif %}</p>
+
+<h2>Order Items:</h2>
+{% if order.items.all|length == 1 %}
+{% for item in order.items.all %}
+<h3>{{ item.product.name }}</h3>
+<p>Brand: {{ item.product.brand }}</p>
+<p>Price: Rs. {{ item.get_final_price }}</p>
+{% if item.quantity > 1 %}
+<p>Quantity: {{ item.quantity }}</p>
+{% endif %}
+{% endfor %}
+{% else %}
+{% for item in order.items.all %}
+<div class="card my-3">
+    <div class="card-body">
+        <h3>{{ item.product.name }}</h3>
+        <p>Brand: {{ item.product.brand }}</p>
+        <p>Price: Rs. {{ item.get_final_price }}</p>
+        {% if item.quantity > 1 %}
+        <p>Quantity: {{ item.quantity }}</p>
+        {% endif %}
+    </div>
+</div>
+{% endfor %}
+{% endif %}-->
+
+<style>
+    section {
+        min-height: 100vh !important;
+        background-color: #eee;
+    }
+
+    #progressbar-1 {
+        color: #455A64;
+    }
+
+    #progressbar-1 li {
+        list-style-type: none;
+        font-size: 13px;
+        width: 33.33%;
+        float: left;
+        position: relative;
+    }
+
+    #progressbar-1 #step1:before {
+        content: "1";
+        color: #fff;
+        width: 29px;
+        margin-left: 22px;
+        padding-left: 11px;
+    }
+
+    #progressbar-1 #step2:before {
+        content: "2";
+        color: #fff;
+        width: 29px;
+    }
+
+    #progressbar-1 #step3:before {
+        content: "3";
+        color: #fff;
+        width: 29px;
+        margin-right: 22px;
+        text-align: center;
+    }
+
+    #progressbar-1 li:before {
+        line-height: 29px;
+        display: block;
+        font-size: 12px;
+        background: #455A64;
+        border-radius: 50%;
+        margin: auto;
+    }
+
+    #progressbar-1 li:after {
+        content: '';
+        width: 121%;
+        height: 2px;
+        background: #455A64;
+        position: absolute;
+        left: 0%;
+        right: 0%;
+        top: 15px;
+        z-index: -1;
+    }
+
+    #progressbar-1 li:nth-child(2):after {
+        left: 50%
+    }
+
+    #progressbar-1 li:nth-child(1):after {
+        left: 25%;
+        width: 121%
+    }
+
+    #progressbar-1 li:nth-child(3):after {
+        left: 25%;
+        width: 50%;
+    }
+
+    #progressbar-1 li.active:before,
+    #progressbar-1 li.active:after {
+        background: #1266f1;
+    }
+
+    .card-stepper {
+        z-index: 0
+    }
+
+
+
+
+    #progressbar-2 {
+        color: #455A64;
+    }
+
+    #progressbar-2 li {
+        list-style-type: none;
+        font-size: 13px;
+        width: 33.33%;
+        float: left;
+        position: relative;
+    }
+
+    #progressbar-2 #step1:before {
+        content: "1";
+        color: #fff;
+        width: 29px;
+        margin-left: 22px;
+        padding-left: 11px;
+    }
+
+    #progressbar-2 #step2:before {
+        content: "2";
+        color: #fff;
+        width: 29px;
+    }
+
+    #progressbar-2 #step3:before {
+        content: "3";
+        color: #fff;
+        width: 29px;
+        margin-right: 22px;
+        text-align: center;
+    }
+
+    #progressbar-2 li:before {
+        line-height: 29px;
+        display: block;
+        font-size: 12px;
+        background: #455A64;
+        border-radius: 50%;
+        margin: auto;
+    }
+
+    #progressbar-2 li:after {
+        content: '';
+        width: 121%;
+        height: 2px;
+        background: #455A64;
+        position: absolute;
+        left: 0%;
+        right: 0%;
+        top: 15px;
+        z-index: -1;
+    }
+
+    #progressbar-2 li:nth-child(1):after {
+        left: 25%;
+        width: 121%
+    }
+
+    #progressbar-2 li:nth-child(2):after {
+        left: 25%;
+        width: 0%
+    }
+
+    #progressbar-2 li.active:before,
+    #progressbar-2 li.active:after {
+        background: #ff5757;
+    }
+</style>
+
+<section>
+    <div class="container py-5 h-100">
+        <div class="row h-100">
+            <div class="col-md-10 col-lg-8 col-xl-6">
+                <div class="card card-stepper w-100" style="border-radius: 10px;">
+                    <div class="card-header p-4">
+                        <div class="d-flex justify-content-between align-items-center">
+                            <div>
+                                <p class="text-muted mb-2"> Order ID <span
+                                        class="fw-bold text-body">{{order.order_id}}</span>
+                                </p>
+                                <p class="text-muted mb-0"> Place On <span
+                                        class="fw-bold text-body">{{order.ordered_date}}</span> </p>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="card-body p-4">
+                        {% if order.items.all|length == 1 %}
+                        {% for item in order.items.all %}
+                        <div class="d-flex flex-row mb-4 pb-2">
+                            <div class="flex-fill">
+                                <h5 class="bold">{{item.product.name}}</h5>
+                                <p class="text-muted"> Qnty: {{item.quantity}} item</p>
+                                <h4 class="mb-3">Rs .{{order.get_total_final_price}}</h4>
+                                <p class="text-muted">Order Status : <span class="text-success">
+                                        {% if order.order_return_requested and order.order_returned == False %}
+                                        <span class="text-danger">Return requested</span>
+                                        {% elif order.order_return_requested and order.order_returned %}
+                                        <span class="text-danger">Order returned</span>
+                                        {% elif order.order_cancelled and order.order_cancelled_by_admin %}
+                                        <span class="text-danger"> order cancelled..( sorry, order canceled due to stock
+                                            issue.The amount
+                                            will be credited to your wallet )</span>
+                                        {% elif order.order_cancelled %}
+                                        <span class="text-danger">order cancelled</span>
+                                        {% elif order.order_recieved and order.order_shipped == False and order.order_delivered == False %}
+                                        Order Recieved
+                                        {% elif order.order_recieved and order.order_shipped and order.order_delivered == False%}
+                                        Order Shipped
+                                        {% elif order.order_recieved and order.order_shipped and order.order_delivered %}
+                                        Order Delivered</span>
+                                    {% else %}
+                                    <span class="text-danger">Order Pending</span>
+                                    {% endif %}
+                                </p>
+                                {% if order.order_expected_delivery_date %}
+                                <p class="text-muted">Expected delivery date : <span
+                                        class="text-body">{{order.order_expected_delivery_date}}</span></p>
+                                {% endif %}
+
+                                {% if order.tracking_id %}
+                                <p class="fw-bold mb-0 small">{{order.tracking_id_title}}</p>
+                                <p class="text-muted mb-0">Tracking Id : {{order.tracking_id}}</p>
+                                {% endif %}
+                            </div>
+                            <div>
+                                <img class="align-self-center img-fluid" src="{{item.product.image.url}}" width="250">
+                            </div>
+                        </div>
+                        {% endfor %}
+
+                        {% else %}
+
+                        {% for item in order.items.all %}
+                        <div class="d-flex flex-row mb-4 pb-2">
+                            <div class="flex-fill">
+                                <h5 class="bold">{{item.product.name}}</h5>
+                                <p class="text-muted"> Qnty: {{item.quantity}} item</p>
+                                <h4 class="mb-3">Rs .{{item.get_final_price}} <span class="small text-muted">
+                                    </span></h4>
+                                <p class="text-muted">Order Status : <span class="text-success">
+                                        {% if order.order_return_requested and order.order_returned == False %}
+                                        <span class="text-danger">Return requested</span>
+                                        {% elif order.order_return_requested and order.order_returned %}
+                                        <span class="text-danger">Order returned</span>
+                                        {% elif order.order_cancelled and order.order_cancelled_by_admin %}
+                                        <span class="text-danger"> order cancelled..( sorry, order canceled due to stock
+                                            issue.The amount
+                                            will be credited to your wallet )</span>
+                                        {% elif order.order_cancelled %}
+                                        <span class="text-danger">order cancelled</span>
+                                        {% elif order.order_recieved and order.order_shipped == False and order.order_delivered == False %}
+                                        Order Recieved
+                                        {% elif order.order_recieved and order.order_shipped and order.order_delivered == False%}
+                                        Order Shipped
+                                        {% elif order.order_recieved and order.order_shipped and order.order_delivered %}
+                                        Order Delivered</span>
+                                    {% else %}
+                                    <span class="text-danger">order pending</span>
+                                    {% endif %}
+                                </p>
+                                {% if order.order_expected_delivery_date %}
+                                <p class="text-muted">Expected delivery date : <span
+                                        class="text-body">{{order.order_expected_delivery_date|date:"Y-m-d" }}</span></p>
+                                {% endif %}
+
+                                {% if order.tracking_id %}
+                                <p class="fw-bold mb-0 small">{{order.tracking_id_title}}</p>
+                                <p class="text-muted mb-0">Tracking Id : {{order.tracking_id}}</p>
+                                {% endif %}
+                            </div>
+                            <div>
+                                <img class="align-self-center img-fluid" src="{{item.product.image.url}}" width="250">
+                            </div>
+                        </div>
+                        <hr>
+                        {% endfor %}
+
+                        {% endif %}
+                        {% if order.order_cancelled %}
+                        <ul id="progressbar-2" class="mx-0 mt-0 mb-5 px-0 pt-0 pb-4">
+                            <li class="step0 active" id="step1"><span
+                                    style="margin-left: 22px; margin-top: 12px;">PLACED</span></li>
+                            <li class="step0 active text-center" id="step2"><span>CANCELLED</span></li>
+                        </ul>
+                        {% else %}
+                        <ul id="progressbar-1" class="mx-0 mt-0 mb-5 px-0 pt-0 pb-4">
+                            <li class="step0 {% if order.order_recieved %}active{% endif %}" id="step1"><span
+                                    style="margin-left: 22px; margin-top: 12px;">PLACED</span></li>
+                            <li class="step0 {% if order.order_shipped %}active{% endif %} text-center" id="step2">
+                                <span>SHIPPED</span>
+                            </li>
+                            <li class="step0 {% if order.order_delivered %}active{% endif %} text-muted text-end"
+                                id="step3"><span style="margin-right: 22px;">DELIVERED</span></li>
+                        </ul>
+                        {% if order.order_delivered == False and order.order_cancelled == False %}
+                        <div class="mb-0">
+                            <p class="small mb-0 fw-lighter text-muted">* You can cancel your order before shipping *
+                            </p>
+                        </div>
+                        {% endif %}
+                        {% endif %}
+                    </div>
+                    {% if order.order_delivered == False and order.order_cancelled == False and order.returned_order_refunded == False %}
+                    <div class="card-footer p-4">
+                        <div class="d-flex justify-content-between">
+                            <p class="fw-normal mb-0"><a href="!#" data-mdb-toggle="modal"
+                                    data-mdb-target="#exampleModal">Cancel This Order</a></p>
+                            <div class="border-start h-100"></div>
+                        </div>
+                    </div>
+                    {% elif order.order_delivered and order.order_cancelled == False and order.order_return_requested == False %}
+                    <div class="card-footer p-4">
+                        <div class="d-flex justify-content-between">
+                            <p class="fw-normal mb-0"><a href="!#" data-mdb-toggle="modal"
+                                    data-mdb-target="#returnOrder">Return This Order</a></p>
+                            <div class="border-start h-100"></div>
+                        </div>
+                    </div>
+                    {% elif order.order_return_requested and order.returned_order_refunded == False %}
+                    <div class="card-footer p-4">
+                        <div class="d-flex justify-content-between">
+                            <p class="fw-normal mb-0"><a href="!#" data-mdb-toggle="modal"
+                                    data-mdb-target="#returnOrder">About The Returned Order</a></p>
+                            <div class="border-start h-100"></div>
+                        </div>
+                    </div>
+                    {% else %}
+                    <div class="card-footer p-4">
+                        <div class="d-flex justify-content-between">
+                            <p class="fw-normal mb-0 text-success small">Return and refunded succesfully..</p>
+                            <div class="border-start h-100"></div>
+                        </div>
+                    </div>
+                    {% endif %}
+                </div>
+            </div>
+            <div class="col-md-10 col-lg-8 col-xl-6">
+                <div class="card card-stepper w-100 mt-1 mt-lg-0" style="border-radius: 10px;">
+                    <div class="card-header p-4">
+                        <p class="fw-lighter h6 text-muted mb-0">Shipping Details</p>
+                    </div>
+                    <div class="card-body">
+                        <div class="row">
+                            <div class="col-sm-4">
+                                <p class="mb-0">
+                                    Name:
+                                </p>
+                            </div>
+                            <div class="col-sm-8 text-muted">
+                                <p class="mb-0">
+                                    {{address.name}}
+                                </p>
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col-sm-4">
+                                <p class="mb-0">
+                                    address:
+                                </p>
+                            </div>
+                            <div class="col-sm-8 text-muted mb-0">
+                                {{address.address}}
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col-sm-4">
+                                <p class="mb-0">
+                                    Phone Number:
+                                </p>
+                            </div>
+                            <div class="col-sm-8 text-muted">
+                                <p class="mb-0">
+                                    {{address.phone_no}}
+                                </p>
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col-sm-4">
+                                <p class="mb-0">
+                                    State:
+                                </p>
+                            </div>
+                            <div class="col-sm-8 text-muted">
+                                <p class="mb-0">
+                                    {{address.state}}
+                                </p>
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col-sm-4">
+                                <p class="mb-0">
+                                    City:
+                                </p>
+                            </div>
+                            <div class="col-sm-8 text-muted">
+                                <p class="mb-0">
+                                    {{address.city}}
+                                </p>
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col-sm-4">
+                                <p class="mb-0">
+                                    Pin Code:
+                                </p>
+                            </div>
+                            <div class="col-sm-8 text-muted">
+                                <p class="mb-0">
+                                    {{address.pin_code}}
+                                </p>
+                            </div>
+                        </div>
+
+                    </div>
+                </div>
+
+                <div class="card card-stepper w-100 mt-1" style="border-radius: 10px;">
+                    <div class="card-header p-4">
+                        <p class="fw-lighter h6 text-muted mb-0">Price Details</p>
+                    </div>
+                    <div class="card-body">
+                        <div class="p-2 d-flex">
+                            <div class="col-8 mb-0">Total Price
+                                {% if order.get_total_count > 1%}
+                                ({{order.get_total_count}} items)
+                                {% endif %}
+                            </div>
+                            <div class="ms-auto mb-0"><i
+                                    class="fa-solid fa-indian-rupee-sign fa-sm me-2"></i>{{order.get_total_list_price}}
+                            </div>
+                        </div>
+                        <div class="p-2 d-flex">
+                            <div class="col-8 mb-0">Discounted Price</div>
+                            <div class="ms-auto mb-0"><i
+                                    class="fa-solid fa-indian-rupee-sign fa-sm me-2"></i>{{order.get_total_price}}</div>
+                        </div>
+                        {% if order.coupon_discount %}
+                        <div class="p-2 d-flex">
+                            <div class="col-8 mb-0">Coupon Discount</div>
+                            <div class="ms-auto mb-0">- {{order.coupon_discount}}</div>
+                        </div>
+                        {% endif %}
+                        <div class="p-2 d-flex">
+                            <div class="col-8 mb-0">Delivery Charge</div>
+                            <div class="ms-auto mb-0">Free</div>
+                        </div>
+                        {% if order.coin_discount %}
+                        <div class="p-2 d-flex">
+                            <div class="col-8 mb-0">Coins</div>
+                            <div class="ms-auto mb-0">- {{order.coin_discount}}</div>
+                        </div>
+                        {% endif %}
+                        <div class="border-top px-2 mx-2"></div>
+                        <div class="p-2 d-flex pt-3">
+                            <div class="col-8 mb-0"><b>Total Amount</b></div>
+                            <div class="ms-auto mb-0"><i
+                                    class="fa-solid fa-indian-rupee-sign fa-sm me-2"></i>{{order.get_total_final_price}}</b>
+                            </div>
+                        </div>
+                        {% if order.order_cancelled or order.returned_order_refunded %}
+                        <div class="p-2 d-flex pt-3">
+                            <div class="col-8 mb-0"><b>Refunded Amount</b></div>
+                            <div class="ms-auto mb-0"><i
+                                    class="fa-solid fa-indian-rupee-sign fa-sm me-2"></i>{{order.get_total_final_price}}</b>
+                            </div>
+                        </div>
+                        {% endif %}
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+<!-- cancel order Modal -->
+<div class="modal fade" id="exampleModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered">
+        <div class="modal-content p-2">
+            <div class="modal-header">
+                <div class="d-flex justify-content-between align-items-center">
+                    <div>
+                        <div class="h5 modal-title" id="exampleModalLabel">Cancel Order</div>
+                        <div class="small text-muted">Order Id: <span class="fw-bold">{{order.order_id}}</span></div>
+                    </div>
+                </div>
+            </div>
+            {% if order.order_recieved == True or order.order_shipped == True %}
+            <div class="modal-body">
+                <h6 class="text-danger">Your order has been shipped.. You cannot cancel now. !!</h6>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-danger" data-mdb-dismiss="modal">no, Close</button>
+            </div>
+            {% else %}
+            <div class="modal-body">
+                <p class="my-0"><span class="fw-bold text-dark">- </span>
+                    If you cancel the order, the money you paid {{order.get_total_final_price}} will be added to your
+                    wallet.
+                </p>
+                <p class="my-0"><span class="fw-bold text-dark">- </span>
+                    You can transfer this money from wallet to your bank.
+                </p>
+                {% if order.coin_discount %}
+                <p class="my-0"><span class="fw-bold">- </span>{{order.coin_discount}} coins will be added to your coins
+                </p>
+                {% endif %}
+
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-danger" data-mdb-dismiss="modal">no, Close</button>
+                <a href="{% url 'cancel-order' order.id %}" class="btn btn-primary">Yes, cancel order</a>
+            </div>
+            {% endif %}
+        </div>
+    </div>
+</div>
+
+<!-- return order Modal -->
+<div class="modal fade" id="returnOrder" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered">
+        <div class="modal-content p-2">
+            <div class="modal-header">
+                <div class="d-flex justify-content-between align-items-center">
+                    <div>
+                        <div class="h5 modal-title" id="exampleModalLabel">Return Request</div>
+                        <div class="small text-muted">Order Id: <span class="fw-bold">{{order.order_id}}</span></div>
+                    </div>
+                </div>
+            </div>
+            {% if order.order_return_requested == False %}
+            <div class="modal-body">
+                <ul>
+                    <li>
+                        <p class="text-dark mb-0">You can return the order within 4 days of delivery.</p>
+                    </li>
+                    <li>
+                        <p class="text-dark mb-0">You are responsible for the cost and risk of returning the Goods to
+                            Us.</p>
+                    </li>
+                    <li>
+                        <p class="text-dark mb-0">You should send the Goods at the following address and format:</p>
+                        <div class="card">
+                            <div class="card-body">
+                                <p class="mb-0">From:</p>
+                                <small class="text-muted">Your address**</small>
+                                <p class="mb-0">To:</p>
+                                <p class="text-muted">
+                                    No. 442 , <br>
+                                    pincode: 673581 <br>
+                                    Wayanad , Kerala. <br>
+                                    ph: +91 00000000
+                                    <hr class="my-0">
+                                <p class="text-muted my-0">ID: {{order.order_id}}</p>
+                                </p>
+                            </div>
+                        </div>
+                    </li>
+                    <li>
+                        <p class="text-dark mb-0">Must mention order ID : {{order.order_id}}</p>
+                    </li>
+                </ul>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-danger" data-mdb-dismiss="modal">No, Close</button>
+                <a href="{% url 'returnOrderRequest' id=order.id %}" class="btn btn-primary">Confirm To Return</a>
+            </div>
+            {% elif order.order_return_requested and order.order_returned == False %}
+            <div class="modal-body">
+                <h6>The returned product is on its way.. Please wait till it arrives. You can fill the bank details for
+                    refund immediately after recieving the product.
+                </h6>
+                <hr>
+                <p class="text-dark mb-0">Make sure that You sended the Goods at the following address and format:</p>
+                <div class="card">
+                    <div class="card-body">
+                        <p class="mb-0">From:</p>
+                        <small class="text-muted">Your address**</small>
+                        <p class="mb-0">To:</p>
+                        <p class="text-muted">
+                            No. 442 , <br>
+                            pincode: 673581 <br>
+                            Wayanad , Kerala. <br>
+                            ph: +91 00000000
+                            <hr class="my-0">
+                        <p class="text-muted my-0">ID: {{order.order_id}}<small class="mx-2">* order ID is mandatory
+                                *</small></p>
+                        </p>
+                    </div>
+                </div>
+                <h6>Thank you...</h6>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-mdb-dismiss="modal">Okey</button>
+            </div>
+            {% elif order.order_returned and order.returned_order_refund_requested == False %}
+            <div class="modal-body">
+                <form action="{% url 'returnBankDetails' id=order.id %}" method="POST">
+                    {% csrf_token %}
+                    <div class="form-outline mb-2">
+                        <input type="text" id="acc_holder_name" class="form-control" name="acc_holder_name" required />
+                        <label class="form-label" for="acc_holder_name">account holder name</label>
+                    </div>
+                    <div class="form-outline mb-2">
+                        <input type="text" id="account_number" class="form-control" name="account_number" required />
+                        <label class="form-label" for="account_number">account number</label>
+                    </div>
+                    <div class="form-outline mb-2">
+                        <input type="text" id="IFSC_code" class="form-control" name="IFSC_code" required />
+                        <label class="form-label" for="IFSC_code">ifsc code</label>
+                    </div>
+                    <div class="form-outline mb-2">
+                        <input type="text" id="Bank_name" class="form-control" name="Bank_name" required />
+                        <label class="form-label" for="Bank_name">bank name</label>
+                    </div>
+                    <div class="form-outline mb-2">
+                        <input type="text" id="Bank_branch" class="form-control" name="Bank_branch" required />
+                        <label class="form-label" for="Bank_branch">bank branch</label>
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-secondary" data-mdb-dismiss="modal">Okey</button>
+                        <input type="submit" value="Submit" class="btn btn-primary">
+                    </div>
+                </form>
+            </div>
+            {% else %}
+            <div class="modal-body">
+                <h6>Your refund request has been successfully completed.. your refund will be processed within 1-4 business days. thank you..</h6>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-mdb-dismiss="modal">Okey</button>
+            </div>
+            {% endif %}
+        </div>
+    </div>
+</div>
+{% endblock %}

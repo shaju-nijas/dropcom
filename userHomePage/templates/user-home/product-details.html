@@ -1,0 +1,32 @@
+{% extends 'user-home/base.html' %}
+{% block title %}DROPCOM home{% endblock %}
+{% block content %}
+<section style="background-color: #eee;">
+    <div class="container py-5">
+        <div class="row justify-content-center">
+            <div class="col-md-8 col-lg-6 col-xl-4">
+                <div class="card text-black">
+                    <img src="{{product.image.url}}"
+                        class="card-img-top" alt="Apple Computer" height="300px" style="object-fit: fill;"/>
+                    <div class="card-body">
+                        <div class="text-center">
+                            <h5 class="card-title">{{product.name}}</h5>
+                            {% if product.brand %}
+                            <p class="text-muted mb-4">{{product.brand}}</p>
+                            {% endif %}
+                        </div>
+                        <hr>
+                        <div class="d-flex justify-content-between total font-weight-bold mt-4">
+                            <span>total</span><span>Rs . 9988</span>
+                        </div>
+
+                        <div class="text-center mt-4">
+                            <div class="mb-2"><a href="{% url 'add_to_cart' product.id %}" class="btn btn-primary btn-block " type="button">add to cart</a></div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+{% endblock %}

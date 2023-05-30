@@ -1,0 +1,173 @@
+{% extends 'admin-page/base.html' %}
+{% block content %}
+
+<style>
+    .card {
+        border-radius: 1rem;
+    }
+</style>
+
+<section>
+    <div class="row">
+        <div class="col-lg-3 col-md-6 mb-2">
+            <div class="card">
+                <div class="card-body">
+                    <div class="row">
+                        <div class="col-8">
+                            <h6 class=" text-muted text-uppercase">Active users</h6>
+                            <h4>{{active.count}}</h4>
+                        </div>
+                        <div class="col-4 text-end">
+                            <i class="fas fa-user fa-fw fa-2xl me-3" style="color: rgba(52, 71, 103, .9);"></i>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="col-lg-3 col-md-6 mb-2">
+            <div class="card">
+                <div class="card-body">
+                    <div class="row">
+                        <div class="col-8">
+                            <h6 class=" text-muted text-uppercase">Inactive users</h6>
+                            <h4>{{inactive.count}}</h4>
+                        </div>
+                        <div class="col-4 text-end">
+                            <i class="fas fa-user-xmark fa-fw fa-2xl me-3" style="color: rgba(52, 71, 103, .9);"></i>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+<section class="mt-4">
+    <div class="row">
+        <div class="col-lg-6">
+            <div class="card">
+                <div class="card-header text-uppercase">ACTIVE USERS</div>
+                <div class="card-body " style="max-height: 100vh;overflow-y: scroll;">
+                    <ul class="list-group list-group-light">
+                        {% for user in active %}
+                        <div class="list-group list-group-light">
+                            <button type="button" class="list-group-item list-group-item-action px-3 border-0 fw-bold"
+                                aria-current="true" data-bs-toggle="modal" data-bs-target="#user{{user.user.id}}">
+                                {{user.user.username}} --||-- {{user.phone_number}}
+                            </button>
+                        </div>
+
+                        <div class="modal fade" id="user{{user.id}}" tabindex="-1"
+                            aria-labelledby="exampleModalLabel" aria-hidden="true">
+                            <div class="modal-dialog modal-dialog-centered">
+                                <div class="modal-content">
+                                    <div class="modal-header">
+                                        <h5 class="modal-title" id="exampleModalLabel">{{user.user.username}}</h5>
+                                        <button type="button" class="btn-close" data-bs-dismiss="modal"
+                                            aria-label="Close"></button>
+                                    </div>
+                                    <div class="modal-body" style="height: 50vh; overflow-y: scroll;">
+                                        <ul class="list-group list-group-light">
+                                            <li class="list-group-item">phone no : {{user.phone_number}}</li>
+                                            <li class="list-group-item">email : {{user.user.email}}</li>
+                                            <li class="list-group-item">coins : {{user.coins}}</li>
+                                            <li class="list-group-item">wallet : {{user.wallet}}</li>
+                                            <li class="list-group-item">total earnings : {{user.total_earnings}}</li>
+                                            <li class="list-group-item">total refunded amount : {{user.refunded_amount}}
+                                            </li>
+                                            <li class="list-group-item">joined on : {{user.date_time_of_joining}}</li>
+                                            <hr>
+                                            <li class="list-group-item">level 1 : {{user.level_1_count}} -- (RS .
+                                                {{user.level_1_earnings}})</li>
+                                            <li class="list-group-item">level 2 : {{user.level_2_count}} -- (RS .
+                                                {{user.level_2_earnings}})</li>
+                                            <li class="list-group-item">level 3 : {{user.level_3_count}} -- (RS .
+                                                {{user.level_3_earnings}})</li>
+                                            <li class="list-group-item">level 4 : {{user.level_4_count}} -- (RS .
+                                                {{user.level_4_earnings}})</li>
+                                            <li class="list-group-item">level 5 : {{user.level_5_count}} -- (RS .
+                                                {{user.level_5_earnings}})</li>
+                                            <li class="list-group-item">level 6 : {{user.level_6_count}} -- (RS .
+                                                {{user.level_6_earnings}})</li>
+                                            <li class="list-group-item">level 7 : {{user.level_7_count}} -- (RS .
+                                                {{user.level_7_earnings}})</li>
+
+                                        </ul>
+                                    </div>
+                                    <div class="modal-footer">
+                                        <button type="button" class="btn btn-secondary"
+                                            data-bs-dismiss="modal">Close</button>
+                                        <button type="button" class="btn btn-danger" data-bs-toggle="modal"
+                                            data-bs-target="#deleteuser{{user.id}}">delete user</button>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="modal fade" id="deleteuser{{user.id}}" tabindex="-1" aria-labelledby="exampleModalLabel"
+                            aria-hidden="true">
+                            <div class="modal-dialog modal-dialog-centered">
+                                <div class="modal-content">
+                                    <div class="modal-header">
+                                        <h5 class="modal-title" id="exampleModalLabel">Delete {{user.user.username}}
+                                        </h5>
+                                        <button type="button" class="btn-close" data-bs-dismiss="modal"
+                                            aria-label="Close"></button>
+                                    </div>
+                                    <div class="modal-body text-capitalize">
+                                        Are you confirm to delete {{user.user.username}} ..
+                                    </div>
+                                    <div class="modal-footer">
+                                        <button type="button" class="btn btn-secondary"
+                                            data-bs-dismiss="modal">cancel</button>
+                                        <a href="delete-user/{{user.user.id}}" type="button"
+                                            class="btn btn-danger">delete</a>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        {% endfor %}
+                    </ul>
+                </div>
+            </div>
+        </div>
+
+
+        <div class="col-lg-6">
+            <div class="card">
+                <div class="card-header text-uppercase">INACTIVE USERS</div>
+                <div class="card-body" style="max-height: 100vh;overflow-y: scroll;">
+                    {% for user in inactive %}
+                    <div class="list-group list-group-light">
+                        <button type="button" class="list-group-item list-group-item-action px-3 border-0 fw-bold"
+                            aria-current="true" data-bs-toggle="modal" data-bs-target="#modal/{{user.user.id}}">
+                            {{user.user.username}} --||-- {{user.phone_number}} --||-- {{user.user.email}}
+                        </button>
+                    </div>
+                    {% endfor %}
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+{% if messages %}
+{% for message in messages %}
+<div class="position-fixed bottom-0 end-0 mb-4 mx-3 w-100" id="alertMessages" style="max-width: 30rem;animation: slideTop .5s ease forwards;">
+    <div class="alert alert-success alert-dismissible fade show text-center" role="alert">
+        <h6>{{message}}</h6>
+    </div>
+</div>
+{% endfor %}
+{% endif %}
+
+<script>
+    var totalUsers = document.getElementById('users');
+    totalUsers.classList.add("active");
+
+    setTimeout(function () {
+        var alertBox = document.getElementById("alertMessages");
+        alertBox.style.display = "none";
+    }, 3000);
+
+</script>
+{% endblock %}

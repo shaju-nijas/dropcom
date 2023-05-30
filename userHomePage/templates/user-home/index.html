@@ -1,0 +1,115 @@
+{% extends 'user-home/base.html' %}
+{% load static %}
+{% block title %}DROPCOM home{% endblock %}
+{% block content %}
+<style>
+    .container {
+        min-height: 100vh !important;
+    }
+
+    div.bg-image,
+    img.categories {
+        height: 300px;
+    }
+
+    @media (max-width:500px) {
+
+        div.bg-image,
+        img.categories {
+            height: 200px;
+        }
+    }
+</style>
+
+<div class="container">
+    <div class="row my-3">
+        <div class="col-lg-8">
+            {% if carousel %}
+            <div id="carousel" class="carousel slide" data-mdb-ride="carousel" data-interval="3000">
+                <div class="carousel-inner">
+                    {% for image in carousel %}
+                    <div class="carousel-item {% if forloop.first %}active{% endif %}">
+                        <img src="{{image.image.url}}" class="d-block w-100 rounded" alt="branding image"
+                            width="100%" />
+                    </div>
+                    {% endfor %}
+                </div>
+            </div>
+            {% else %}
+            <img src="" alt="else image" width="100%" class="d-block w-100 rounded">
+            {% endif %}
+        </div>
+        <div class="col-lg-4 my-lg-5 px-5">
+            <div class="my-3 my-lg-5">
+                <div class="my-2 my-lg-5">
+                    <a href="profile/" class="text-reset"><button class="btn btn-primary btn-lg btn-block hvr-btn">My
+                            Profile</button></a>
+                </div>
+                <div class="my-2 my-lg-5">
+                    <a href="{% url 'referAndEarn' %}" class="text-reset"><button
+                            class="btn btn-primary btn-lg btn-block hvr-btn">refer and
+                            earn</button></a>
+                </div>
+                <div class="my-2 my-lg-5">
+                    <a href="profile/play-and-earn-rewards" class="text-reset"><button
+                            class="btn btn-primary btn-lg btn-block">play and
+                            win</button></a>
+                </div>
+                <div class="my-2 my-lg-5">
+                    <a href="{% url 'userWallet' %}" class="text-reset"><button
+                            class="btn btn-primary btn-lg btn-block">my
+                            wallet</button></a>
+                </div>
+            </div>
+        </div>
+    </div>
+    <hr>
+
+
+    {% if categories %}
+    <section>
+        <div class="container py-5">
+            <div class="row">
+                {% for category in categories %}
+                <div class="col-lg-3 col-md-6 col-6 mb-4 px-1">
+                    <div class="bg-image hover-zoom ripple shadow-1-strong rounded">
+                        <img src="{{category.category_image.url}}" class="categories w-100" style="object-fit: fill;" />
+                        <a href="{% url 'products-list' category.id %}">
+                            <div class="mask" style="background-color: rgba(0, 0, 0, 0.3);">
+                                <div class="d-flex justify-content-start align-items-start h-100">
+                                    <h5><span
+                                            class="badge bg-light pt-2 ms-3 mt-3 text-dark">{{category.category}}</span>
+                                    </h5>
+                                </div>
+                            </div>
+                            <div class="hover-overlay">
+                                <div class="mask" style="background-color: rgba(253, 253, 253, 0.15);"></div>
+                            </div>
+                        </a>
+                    </div>
+                </div>
+                {% endfor %}
+            </div>
+        </div>
+    </section>
+    {% endif %}
+    {% if messages %}
+    {% for message in messages %}
+    <div class="position-fixed top-0 end-0 mb-4 my-3 w-100" id="alertMessages" style="max-width: 30rem;animation: slideTop .5s ease forwards;">
+        <div class="alert alert-dismissible fade show text-center {% if message.tags == 'error' %}alert-danger{% else %}alert-success{% endif %}"
+            role="alert">
+            <h6>{{message}}</h6>
+        </div>
+    </div>
+    {% endfor %}
+    {% endif %}
+</div>
+<script>
+    setTimeout(function () {
+        var alertBox = document.getElementById("alertMessages");
+        alertBox.style.display = "none";
+    }, 3000);
+</script>
+
+
+{% endblock %}

@@ -1,0 +1,124 @@
+{% extends 'user-home/base.html' %}
+{% block title %}DROPCOM play and earn - Lottodrop{% endblock %}
+{% block content %}
+<style>
+    section {
+        min-height: 100vh !important;
+    }
+
+    @media (min-width:900px) {
+        hr {
+            display: none;
+        }
+    }
+
+    ul.icon {
+        list-style: none;
+        padding-left: 0;
+    }
+
+    ul.icon li.icon:before {
+        content: ">";
+        margin-right: 5px;
+    }
+
+    a {
+        cursor: pointer;
+    }
+</style>
+<section>
+    <div class="container px-lg-5 mt-3">
+        <div class="card">
+            <div class="card-header">
+                <h6>Lottodrop</h6>
+            </div>
+            <div class="card-body">
+                <div class="row">
+                    <div class="col-lg-4 my-2">
+                        <p>Choose six numbers (1-50)</p>
+                        <form method="POST">
+                            {% csrf_token %}
+                            <div class="row mx-0 px-0">
+                                <div class="col mx-0 px-0">
+                                    <input type="number" class="form-control" name="num1" min="1" max="50"
+                                        pattern="[1-9]|[1-4][0-9]|50">
+                                </div>
+
+                                <div class="col mx-0 px-0">
+                                    <input type="number" class="form-control" name="num2" min="1" max="50"
+                                        pattern="[1-9]|[1-4][0-9]|50">
+                                </div>
+
+                                <div class="col mx-0 px-0">
+                                    <input type="number" class="form-control" name="num3" min="1" max="50"
+                                        pattern="[1-9]|[1-4][0-9]|50">
+                                </div>
+
+                                <div class="col mx-0 px-0">
+                                    <input type="number" class="form-control" name="num4" min="1" max="50"
+                                        pattern="[1-9]|[1-4][0-9]|50">
+                                </div>
+
+                                <div class="col mx-0 px-0">
+                                    <input type="number" class="form-control" name="num5" min="1" max="50"
+                                        pattern="[1-9]|[1-4][0-9]|50">
+                                </div>
+
+                                <div class="col mx-0 px-0">
+                                    <input type="number" class="form-control" name="num6" min="1" max="50"
+                                        pattern="[1-9]|[1-4][0-9]|50">
+                                </div>
+                            </div>
+                            <button type="submit" class="btn btn-success btn-sm btn-block my-4">choose these numbers
+                            </button>
+                        </form>
+                        <a class="text-primary"  data-mdb-toggle="modal"
+                        data-mdb-target="#lottery">
+                            Previous winning lottery no.</a>
+
+                        <div class="modal fade" id="lottery" tabindex="-1" aria-labelledby="exampleModalLabel"
+                            aria-hidden="true">
+                            <div class="modal-dialog modal-dialog-centered">
+                                <div class="modal-content">
+                                    <div class="modal-body text-center p-3">
+                                        <h6>25 | 41 | 49 | 35 | 27</h6>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <hr>
+                    </div>
+                    <div class="col-lg-4 ps-lg-4 my-2">
+                        <h5 class="fw-bold mb-0 ms-lg-3">How to Play</h5>
+                        <ul>
+                            <li><span class="fw-semibold">Select Your Numbers :</span> select six numbers (1-50)</li>
+                            <li><span class="fw-semibold">Pay for your ticket :</span> use your coins to pay for your
+                                ticket (50 coins)</li>
+                            <li><span class="fw-semibold">Result :</span> The result is published every 20 minutes 
+                            </li>
+                            <li><span class="fw-semibold">Reward :</span> Reward will be credited directly to your coins
+                            </li>
+                        </ul>
+                        <hr>
+                    </div>
+                    <div class="col-lg-4 my-2">
+                        <h5 class="fw-bold mb-0">Prices</h5>
+                        <ul class="icon">
+                            <li class="icon">There are six prizes available to win in</li>
+                            <li class="icon">If you match all six main numbers , you win the jackpot, which is ₹1200. If
+                                more than one person matches all six numbers , the jackpot is shared evenly between the
+                                winners. For example, if three people lay claim to a jackpot of ₹1200 each would receive
+                                approximately ₹400</li>
+                            <li class="icon">If you match 5 main numbers, you will get ₹300</li>
+                            <li class="icon">If you match 4 main numbers, you will get ₹250</li>
+                            <li class="icon">If you match 3 main numbers, you will get ₹200</li>
+                            <li class="icon">If you match 2 main numbers, you will get ₹150</li>
+                            <li class="icon">If you match 1 main numbers, you will get ₹100</li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+{% endblock %}

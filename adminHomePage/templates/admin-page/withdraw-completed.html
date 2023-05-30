@@ -1,0 +1,30 @@
+{% extends 'admin-page/base.html' %}
+{% block content %}
+<div class="card">
+    <div class="card-body" style="max-width: 100%;overflow-x: scroll;">
+        <table class="table table-striped table-hover">
+            <thead class="table-secondary">
+                <tr>
+                    <th>Date-Time</th>
+                    <th>user</th>
+                    <th>withdrawed amount</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for data in withdraw_db %}
+                <tr>
+                    <td>{{data.date_time_of_withdraw_completed}}</td>
+                    <td>{{data.user.username}}</td>
+                    <td>{{data.withdrawed_amount}}</td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+
+    </div>
+</div>
+<script>
+    var withdrawCompleted = document.getElementById('withdrawCompleted');
+    withdrawCompleted.classList.add("active");
+</script>
+{% endblock %}

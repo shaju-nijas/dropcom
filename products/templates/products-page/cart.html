@@ -1,0 +1,260 @@
+{% extends 'user-home/base.html' %}
+{% load static %}
+{% block title %}DROPCOM cart{% endblock %}
+{% block content %}
+<style>
+    .h-custom {
+        min-height: 100vh !important;
+    }
+
+    .card-registration .select-input.form-control[readonly]:not([disabled]) {
+        font-size: 1rem;
+        line-height: 2.15;
+        padding-left: .75em;
+        padding-right: .75em;
+    }
+
+    .card-registration .select-arrow {
+        top: 13px;
+    }
+
+    .bg-grey {
+        background-color: #eae8e8;
+    }
+
+    @media (min-width: 992px) {
+        .card-registration-2 .bg-grey {
+            border-top-right-radius: 16px;
+            border-bottom-right-radius: 16px;
+        }
+    }
+
+    @media (max-width: 991px) {
+        .card-registration-2 .bg-grey {
+            border-bottom-left-radius: 16px;
+            border-bottom-right-radius: 16px;
+        }
+    }
+</style>
+
+<section class="h-100 h-custom" style="background-color: #eee;">
+    <div class="container py-5 h-100">
+        <div class="row d-flex justify-content-center align-items-center h-100">
+            <div class="col-12">
+                <div class="card card-registration card-registration-2" style="border-radius: 15px;">
+                    <div class="card-body p-0">
+                        {% if order.items.all %}
+                        <div class="row g-0">
+                            <div class="col-lg-8">
+                                <div class="p-5">
+                                    <div class="d-flex justify-content-between align-items-center mb-5">
+                                        <h1 class="fw-bold mb-0 text-black text-uppercase">dropcom cart</h1>
+                                        <h6 class="mb-0 text-muted">{{order.get_total_count}} items</h6>
+                                    </div>
+                                    <hr class="my-4">
+                                    {% for item in order.items.all %}
+                                    <div class="row mb-4 d-flex justify-content-between align-items-center">
+                                        <div class="col-md-2 col-lg-2 col-xl-2">
+                                            <img src="{{item.product.image.url}}" class="img-fluid rounded-3"
+                                                alt="{{item.product.name}} image">
+                                        </div>
+                                        <div class="col-md-3 col-lg-3 col-xl-3">
+                                            <h6 class="text-muted">{{item.product.brand}}</h6>
+                                            <h6 class="text-black mb-0">{{item.product.name}}</h6>
+                                        </div>
+                                        <div class="col-md-3 col-lg-3 col-xl-2 d-flex">
+                                            <h6 class="text-muted">qnty: <span
+                                                    class="h6 text-dark">{{item.quantity}}</span></h6>
+                                        </div>
+                                        <div class="col-md-3 col-lg-2 col-xl-2 offset-lg-1">
+                                            <h6 class="mb-0"><i
+                                                    class="fa-solid fa-indian-rupee-sign fa-sm me-2"></i>{{item.get_total_item_price}}
+                                            </h6>
+                                        </div>
+                                        <div class="col-md-1 col-lg-1 col-xl-1 text-end">
+                                            <a href="{% url 'delete_cart' item.product.id %}" class="text-muted"><i
+                                                    class="fas fa-trash-alt"></i></a>
+                                        </div>
+                                    </div>
+
+                                    <hr class="my-4">
+
+                                    {% endfor %}
+
+                                    <div class="pt-5">
+                                        <a onclick="goback()" class="text-body text-dark h6" style="cursor: pointer;"><i
+                                                class="fas fa-long-arrow-alt-left me-2"></i>Back to shop</a>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-lg-4 bg-grey">
+                                <div class="p-5">
+                                    <h3 class="fw-bold mb-5 mt-2 pt-1">Summary</h3>
+                                    <hr class="my-4">
+
+                                    <div class="d-flex justify-content-between mb-4">
+                                        <h5 class="text-uppercase">items {{order.get_total_count}}</h5>
+                                        <h5><i
+                                                class="fa-solid fa-indian-rupee-sign fa-sm me-2"></i>{{order.get_total_price}}
+                                        </h5>
+                                    </div>
+                                    <table class="table table-sm my-4">
+                                        <tr>
+                                            <th>No.</th>
+                                            <th>Product</th>
+                                            <th>Qnty</th>
+                                            <th>Price</th>
+                                            <th>Total</th>
+                                        </tr>
+                                        {% for item in order.items.all %}
+                                        <tr>
+                                            <td>{{forloop.counter}}</td>
+                                            <td>{{item.product.name}}</td>
+                                            <td>{{item.quantity}}</td>
+                                            <td>{{item.product.price}}</td>
+                                            <td>{{item.get_total_item_price}}</td>
+                                        </tr>
+                                        {% endfor %}
+                                    </table>
+
+                                    <h5 class="text-uppercase mb-3">Coupon Code</h5>
+
+                                    <div class="mb-lg-5 mb-4">
+                                        <form action="{% url 'apply_coupon' %}" method="POST">
+                                            {% csrf_token %}
+                                            <div class="form-outline">
+                                                <input type="text" id="form3Examplea2" class="form-control" name="code"
+                                                    required oninput="this.value = this.value.toUpperCase()" />
+                                                <label class="form-label" for="form3Examplea2">Enter your
+                                                    code</label>
+                                            </div>
+
+                                            <button type="submit" class="btn btn-dark my-3 btn-block">Apply</button>
+                                        </form>
+                                    </div>
+                                    {% if user.coins != 0 %}
+                                    <div class="mb-5">
+                                        <div class="d-flex justify-content-between mb-4 align-items-center">
+                                            <h5 class="text-uppercase">coins <i
+                                                    class="fa-solid fa-coins text-warning mx-2"></i> {{user.coins}}</h5>
+                                            <a href="{% url 'apply_coin' %}" class="btn btn-dark text-uppercase"
+                                                id="coinApply">Apply</a>
+                                        </div>
+                                    </div>
+                                    {% endif %}
+                                    <hr class="my-4">
+
+                                    <div class="d-flex justify-content-between">
+                                        <p class="text-uppercase">List price
+                                            {% if order.get_total_count > 1 %}
+                                            ({{order.get_total_count}} items)
+                                            {% endif %}</p>
+                                        <p><i
+                                                class="fa-solid fa-indian-rupee-sign fa-sm me-2"></i>{{order.get_total_list_price}}
+                                        </p>
+                                    </div>
+                                    <div class="d-flex justify-content-between ">
+                                        <p class="text-uppercase">Selling price</p>
+                                        <p><i
+                                                class="fa-solid fa-indian-rupee-sign fa-sm me-2"></i>{{order.get_total_price}}
+                                        </p>
+                                    </div>
+                                    {% if order.coin_discount %}
+                                    <div class="d-flex justify-content-between ">
+                                        <p class="text-uppercase">Coins discount</p>
+                                        <p> - <i
+                                                class="fa-solid fa-indian-rupee-sign fa-sm mx-2"></i>{{order.coin_discount}}
+                                        </p>
+                                    </div>
+                                    {% endif %}
+                                    {% if order.coupon_discount %}
+                                    <div class="d-flex justify-content-between ">
+                                        <p class="text-uppercase">Coupon discount</p>
+                                        <p> - <i
+                                                class="fa-solid fa-indian-rupee-sign fa-sm mx-2"></i>{{order.coupon_discount}}
+                                        </p>
+                                    </div>
+                                    {% endif %}
+                                    {% if order.coin_discount or order.coupon_discount %}
+                                    <div class="d-flex justify-content-between ">
+                                        <p class="text-uppercase">Special price</p>
+                                        <p><i
+                                                class="fa-solid fa-indian-rupee-sign fa-sm me-2"></i>{{order.get_total_final_price}}
+                                        </p>
+                                    </div>
+                                    {% endif %}
+                                    <div class="d-flex justify-content-between ">
+                                        <p class="text-uppercase">Delivery fee</p>
+                                        <p class="text-success">free</p>
+                                    </div>
+                                    <hr>
+                                    <div class="d-flex justify-content-between mb-5">
+                                        <h5 class="text-uppercase">Total Amount</h5>
+                                        <h5><i
+                                                class="fa-solid fa-indian-rupee-sign fa-sm me-2"></i>{{order.get_total_final_price}}
+                                        </h5>
+                                    </div>
+
+
+                                    <a href="{% url 'add_delivery_address' %}" type="button"
+                                        class="btn btn-dark btn-block btn-lg">
+                                        <div class="d-flex justify-content-between">
+                                            <span><i
+                                                    class="fa-solid fa-indian-rupee-sign fa-sm me-2"></i>{{order.get_total_final_price}}</span>
+                                            <span>Checkout <i class="fas fa-long-arrow-alt-right ms-2"></i></span>
+                                        </div>
+                                    </a>
+
+                                </div>
+                            </div>
+                        </div>
+                        {% else %}
+                        <div class="text-center w-100 py-3" style="width: 100%;font-family: sans-serif;">
+                            <img src="{% static 'images/empty-cart.jpg' %}" alt="" style="object-fit:contain;"
+                                width="100%" height="400px">
+                            <h2 class="fw-bold">YOUR SHOPPING CART IS EMPTY</h2>
+                            <div class="px-3 px-lg-5 py-3">
+                                <p>Return to the store to add items for your delivery slot. Before proceed to
+                                    checkout<br>
+                                    you must add some products to your shopping cart. You will find a lot of
+                                    interesting<br>
+                                    products on our shop page.</p>
+                            </div>
+                            <a href="{% url 'index' %}" class="btn btn-dark fw-bold px-5">explore</a>
+                        </div>
+                        {% endif %}
+                    </div>
+                </div>
+            </div>
+        </div>
+        {% if messages %}
+        {% for message in messages %}
+        <div class="position-fixed top-0 end-0 mb-4 my-3 w-100" id="alert" style="max-width: 30rem;animation: slideTop .5s ease forwards;">
+            <div class="alert alert-dismissible fade show text-center {% if message.tags == 'error' %}alert-danger{% else %}alert-success{% endif %}"
+                role="alert">
+                <h6>{{message}}</h6>
+            </div>
+        </div>
+        <script>
+            setTimeout(function () {
+                var alertBox = document.getElementById("alert");
+                alertBox.style.display = "none";
+            }, 3000);
+        </script>
+        {% endfor %}
+        {% endif %}
+    </div>
+</section>
+
+<script>
+    function goback() {
+        window.history.back()
+    }
+
+    document.getElementById('coinApply').addEventListener("click", coinApply)
+    function coinApply() {
+        var button = document.getElementById('coinApply')
+        button.innerHTML = "applied"
+    }
+</script>
+{% endblock %}

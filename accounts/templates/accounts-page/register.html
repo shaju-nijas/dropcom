@@ -1,0 +1,127 @@
+{% extends 'accounts-page/base.html' %}
+{% load static %}
+{% block title %}DROPCOM REGISTER{% endblock %}
+{% block content %}
+<style>
+    #alertMessages {
+        position: fixed;
+        /** will always stay in place even when the page scrolls */
+
+        width: 100%;
+        /** give it a width so the element doesn't take 100% of the viewport (you may alternatively "col-*" classes to it to maintain responsiveness) */
+
+        right: 0;
+        left: 0;
+        margin: auto;
+        /** 
+  * the above 3 rules center the element horizontally.
+  * the "right" and "left" rules must have a value of "0" or else the element cannot be centered using the "margin" rule;
+  */
+
+        top: 50%;
+        transform: translate3d(0, -50%, 0);
+        /** the above 2 rules center the elemnt vertically */
+
+        text-align: center;
+        z-index: 9999;
+    }
+</style>
+<section class="bg-light" style="min-height: 100vh;">
+    <div class="container py-5 h-100 mt-3 mt-lg-0">
+        <div class="row d-flex justify-content-center align-items-center h-100">
+            <div class="col col-xl-10">
+                <div class="card" style="border-radius: 1rem;">
+                    <div class="row g-0">
+                        <div class="col-md-6 col-lg-5 d-none d-md-block bg-light">
+                            <img src="{% static 'images/DROPCOM-banner.jpg' %}" alt="login form"
+                                class="img-fluid my-lg-5 py-lg-5 px-lg-2" />
+                        </div>
+                        <div class="col-md-6 col-lg-7 d-flex align-items-center">
+                            <div class="card-body px-4 px-lg-5 text-black">
+                                <form action="{% url 'register_page' %}" method="POST" enctype="multipart/form-data">
+
+                                    <div class="d-flex align-items-center mb-3 pb-1">
+                                        <span class="h1 fw-bold mb-0">REGISTER NOW</span>
+                                    </div>
+
+                                    <h5 class="fw-normal mb-3 pb-3" style="letter-spacing: 1px;">create an account
+                                    </h5>
+
+                                    {% csrf_token %}
+
+                                    <!--username input-->
+                                    <div class="form-outline mb-4">
+                                        <input type="text" id="username" class="form-control" name="username"
+                                            required />
+                                        <label class="form-label" for="username">Username</label>
+                                    </div>
+
+                                    <!--email input-->
+                                    <div class="form-outline mb-4">
+                                        <input type="email" id="email" class="form-control" name="email" required />
+                                        <label class="form-label" for="email">Email</label>
+                                    </div>
+
+                                    <!--phone input-->
+                                    <div class="form-outline mb-4">
+                                        <input type="text" id="phone_number" class="form-control" name="phone_number"
+                                            minlength="10" maxlength="10"
+                                            onkeypress="return event.charCode >= 48 && event.charCode <= 57" required />
+                                        <label class="form-label" for="phone_number">Phone Number</label>
+                                    </div>
+
+                                    <!--password input-->
+                                    <div class="form-outline mb-4">
+                                        <input type="password" id="password" class="form-control" name="password"
+                                            required />
+                                        <label class="form-label" for="password">Password</label>
+                                    </div>
+
+                                    <!--confirm password input-->
+                                    <div class="form-outline mb-4">
+                                        <input type="password" id="confirm_password" class="form-control"
+                                            name="confirm_password" required />
+                                        <label class="form-label" for="confirm_password">Confirm Password</label>
+                                    </div>
+
+                                    <!--Referal code input-->
+                                    <div class="form-outline mb-4">
+                                        <input type="number" id="referal_code" class="form-control"
+                                            name="referal_code" />
+                                        <label class="form-label" for="referal_code">Referral Code</label>
+                                    </div>
+
+                                    <div class="pt-1 mb-4">
+                                        <button class="btn btn-dark btn-lg btn-block" type="submit">Login</button>
+                                    </div>
+
+                                    <p class="mb-5 pb-lg-2" style="color: #393f81;">Already have an account? <a
+                                            href="{% url 'login_page' %}" style="color: #393f81;">Login here</a></p>
+                                    <a href="{% url 'termsAndConditions' %}" class="small text-muted">Terms of use.</a>
+                                    <a href="{% url 'privacy_policy' %}" class="small text-muted">Privacy policy</a>
+                                </form>
+
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    {% if messages %}
+    {% for message in messages %}
+    <div class="position-fixed w-100" id="alertMessages" style="max-width: 30rem;animation: slideTop .5s ease forwards;">
+        <div class="alert alert-danger alert-dismissible fade show text-center" role="alert">
+            <h6>{{message}}</h6>
+        </div>
+    </div>
+    {% endfor %}
+    {% endif %}
+</section>
+<script>
+    setTimeout(function () {
+        var alertBox = document.getElementById("alertMessages");
+        alertBox.style.display = "none";
+    }, 3000);
+</script>
+{% endblock %}

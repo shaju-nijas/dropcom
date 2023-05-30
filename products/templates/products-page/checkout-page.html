@@ -1,0 +1,205 @@
+{% extends 'user-home/base.html' %}
+{% block title %}DROPCOM checkout page{% endblock %}
+{% block content %}
+
+<section style="background-color: #eee;">
+    <div class="container py-5">
+        <div class="card">
+            <div class="card-body">
+                <div class="row d-flex justify-content-center pb-5">
+                    <div class="col-lg-7 col-xl-5 mb-4 mb-md-0">
+                        <div class="py-4 d-flex flex-row">
+                            <h5><span class="far fa-check-square pe-2"></span><b>DROPCOM</b> |</h5>
+                            <span class="ps-2">Pay</span>
+                        </div>
+                        <h4 class="text-success">Rs. {{order.get_total_final_price}}</h4>
+                        <div class="card">
+                            <div class="card-header mt-2">
+                                <h6>Address</h6>
+                            </div>
+                            <div class="card-body">
+                                <div class="row">
+                                    <div class="col-sm-4">
+                                        <p class="mb-0">
+                                            Name:
+                                        </p>
+                                    </div>
+                                    <div class="col-sm-8 text-muted">
+                                        <p class="mb-0">
+                                            {{address.name}}
+                                        </p>
+                                    </div>
+                                </div>
+                                <div class="row">
+                                    <div class="col-sm-4">
+                                        <p class="mb-0">
+                                            address:
+                                        </p>
+                                    </div>
+                                    <div class="col-sm-8 text-muted mb-0">
+                                        {{address.address}}
+                                    </div>
+                                </div>
+                                <div class="row">
+                                    <div class="col-sm-4">
+                                        <p class="mb-0">
+                                            Phone Number:
+                                        </p>
+                                    </div>
+                                    <div class="col-sm-8 text-muted">
+                                        <p class="mb-0">
+                                            {{address.phone_no}}
+                                        </p>
+                                    </div>
+                                </div>
+                                <div class="row">
+                                    <div class="col-sm-4">
+                                        <p class="mb-0">
+                                            State:
+                                        </p>
+                                    </div>
+                                    <div class="col-sm-8 text-muted">
+                                        <p class="mb-0">
+                                            {{address.state}}
+                                        </p>
+                                    </div>
+                                </div>
+                                <div class="row">
+                                    <div class="col-sm-4">
+                                        <p class="mb-0">
+                                            City:
+                                        </p>
+                                    </div>
+                                    <div class="col-sm-8 text-muted">
+                                        <p class="mb-0">
+                                            {{address.city}}
+                                        </p>
+                                    </div>
+                                </div>
+                                <div class="row">
+                                    <div class="col-sm-4">
+                                        <p class="mb-0">
+                                            Pin Code:
+                                        </p>
+                                    </div>
+                                    <div class="col-sm-8 text-muted">
+                                        <p class="mb-0">
+                                            {{address.pin_code}}
+                                        </p>
+                                    </div>
+                                </div>
+
+                                <div class="float-end">
+                                    <a href="{% url 'edit-delivery-address' %}" class="btn btn-outline-dark btn-sm my-2">EDIT</a>
+                                </div>
+                            </div>
+                        </div>
+                        <form class="py-3">
+                            <div class="d-flex flex-row pb-3">
+                                <div class="d-flex align-items-center pe-2">
+                                    <input class="form-check-input" type="radio" name="radioNoLabel" id="radioNoLabel1"
+                                        value="" aria-label="..." checked />
+                                </div>
+                                <div class="rounded border d-flex w-100 p-3 align-items-center">
+                                    <p class="mb-0">
+                                        <i class="fa-regular fa-credit-card fa-lg me-3"></i>UPI / Netbanking
+                                    </p>
+                                </div>
+                            </div>
+                        </form>
+                        <input type="button" value="Proceed to payment" class="btn btn-primary btn-block btn-lg"
+                            id="rzp-button1" />
+                    </div>
+
+                    <div class="col-md-5 col-xl-4 offset-xl-1">
+                        <div class="py-4 d-flex justify-content-end">
+                            <h6><a onclick="goBack()" class="text-link" style="cursor: pointer;">Cancel and return to
+                                    website</a></h6>
+                        </div>
+                        <div class="rounded d-flex flex-column p-2" style="background-color: #f8f9fa;">
+                            <div class="p-2 me-3">
+                                <h4>Order Recap</h4>
+                            </div>
+                            <div class="p-2 d-flex">
+                                <div class="col-8">Total Price
+                                    {% if order.get_total_count > 1%}
+                                    ({{order.get_total_count}} items)
+                                    {% endif %}
+                                </div>
+                                <div class="ms-auto"><i class="fa-solid fa-indian-rupee-sign fa-sm me-2"></i>{{order.get_total_list_price}}</div>
+                            </div>
+                            <div class="p-2 d-flex">
+                                <div class="col-8">Discounted Price</div>
+                                <div class="ms-auto"><i class="fa-solid fa-indian-rupee-sign fa-sm me-2"></i>{{order.get_total_price}}</div>
+                            </div>
+                            {% if order.coupon_discount %}
+                            <div class="p-2 d-flex">
+                                <div class="col-8">Coupon Discount</div>
+                                <div class="ms-auto">- {{order.coupon_discount}}</div>
+                            </div>
+                            {% endif %}
+                            <div class="p-2 d-flex">
+                                <div class="col-8">Delivery Charge</div>
+                                <div class="ms-auto">Free</div>
+                            </div>
+                            {% if order.coin_discount %}
+                            <div class="p-2 d-flex">
+                                <div class="col-8">Coins</div>
+                                <div class="ms-auto">- {{order.coin_discount}}</div>
+                            </div>
+                            {% endif %}
+                            <div class="border-top px-2 mx-2"></div>
+                            <div class="p-2 d-flex pt-3">
+                                <div class="col-8"><b>Total </b></div>
+                                <div class="ms-auto"><b class="text-success"><i class="fa-solid fa-indian-rupee-sign fa-sm me-2 text-dark"></i>{{order.get_total_final_price}}</b></div>
+                            </div>
+                            <div class="p-2 d-flex">
+                                <div class="col-8 small text-success">you saved Rs. {{saved_price}}</div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    </div>
+
+</section>
+
+<script>
+    function goBack() {
+        window.history.back()
+    }
+</script>
+
+
+<form action="https://www.example.com/payment/success/" method="POST">
+    <script src="https://checkout.razorpay.com/v1/checkout.js"></script>
+    <script>
+        var options = {
+            "key": "{{razorpay_merchant_id}}",
+            "amount": "{% widthratio final_price 1 100 %}",
+            "currency": "INR",
+            "name": "DROPCOM",
+            "description": "payment",
+            "image": "",
+            "order_id": "{{order_id}}",
+            "callback_url": "{{callback_url}}",
+            "redirect": "true",
+            "prefill": {
+                "name": "{{request.user.username}}",
+                "email": "{{request.user.email}}",
+            },
+            "theme": {
+                "color": "#6e5dcf"
+            }
+        };
+        var rzp1 = new Razorpay(options);
+        document.getElementById('rzp-button1').onclick = function (e) {
+            rzp1.open();
+            e.preventDefault();
+        }
+    </script>
+</form>
+
+{% endblock %}

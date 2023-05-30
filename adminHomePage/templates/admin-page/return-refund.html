@@ -1,0 +1,63 @@
+{% extends 'admin-page/base.html' %}
+{% block content %}
+<div class="card">
+    <div class="card-body" style="max-width: 100%; overflow-x: scroll;">
+        <table class="table table-striped table-hover table-sm">
+            <thead class="table-secondary">
+                <tr>
+                    <th>No.</th>
+                    <th>Order ID</th>
+                    <th>User</th>
+                    <th>Return Amount</th>
+                    <th>acc name</th>
+                    <th>acc num</th>
+                    <th>ifsc code</th>
+                    <th>bank</th>
+                    <th>branch</th>
+                    <th></th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for order , bank , users in datas %}
+                <tr>
+                    <td>{{forloop.counter}}</td>
+                    <td>{{order.order_id}}</td>
+                    <td>{{bank.user.username}}</td>
+                    <td>{{order.get_total_final_price}}</td>
+                    <td>{{bank.acc_holder_name}}</td>
+                    <td>{{bank.acc_num}}</td>
+                    <td>{{bank.IFSC_code}}</td>
+                    <td>{{bank.bank}}</td>
+                    <td>{{bank.bank_branch}}</td>
+                    <td><a href="{% url 'refund_payed' id=order.id %}" class="btn btn-secondary">Refund Payed</a></td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </div>
+</div>
+
+{% if messages %}
+{% for message in messages %}
+<div class="position-fixed bottom-0 end-0 mb-4 my-3 w-100" id="alertMessages"
+    style="max-width: 30rem;animation: slideTop .5s ease forwards;">
+    <div class="alert alert-dismissible fade show text-center {% if message.tags == 'error' %}alert-danger{% else %}alert-success{% endif %}"
+        role="alert">
+        <h6>{{message}}</h6>
+    </div>
+</div>
+
+<script>
+    setTimeout(function () {
+        var alertBox = document.getElementById("alertMessages");
+        alertBox.style.display = "none";
+    }, 5000);
+</script>
+{% endfor %}
+{% endif %}
+
+<script>
+    var returnRefundRequest = document.getElementById('returnRefundRequest');
+    returnRefundRequest.classList.add("active");
+</script>
+{% endblock %}

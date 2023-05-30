@@ -1,0 +1,177 @@
+{% extends 'user-home/base.html' %}
+{% load static %}
+{% block title %}my orders{% endblock %}
+{% block content %}
+
+<style>
+    .gradient-custom {
+        background: white;
+        min-height: 100vh !important;
+    }
+
+    a .card {
+        transition: .3s
+    }
+
+    a .card:hover {
+        box-shadow: 0px 0px 15px rgb(92, 92, 92);
+    }
+</style>
+
+<section class="h-100 gradient-custom">
+    <div class="container py-3 h-100">
+        {% if orders %}
+        <div class="d-flex justify-content-center align-items-center h-100">
+            <div class="row px-lg-5 w-100">
+                {% for order in orders %}
+                {% if order.items.all|length == 1 %}
+                <a href="{% url 'userOrderDetail' order.id %}" class="mx-lg-5">
+                    <div class="col-12 w-100">
+                        <div class="card w-100 my-1" style="border-radius: 10px;width: 100%;">
+                            <div class="card-body">
+                                <div class="row">
+                                    <div class="col-md-1 col-3" style="max-height: 100px;">
+                                        <img src="{{order.items.first.product.image.url}}" class="img-fluid" alt=""
+                                            style="object-fit: contain;max-height: 80px;" width="100%">
+                                    </div>
+                                    <div class="col-md-3 d-none d-md-block mt-3 text-center">
+                                        <p class="mb-0">{{order.items.first.product.name}}</p>
+                                        <p class="text-muted mb-0">{{order.items.first.product.brand}}</p>
+                                    </div>
+                                    <div class="col-md-3 d-none d-md-block mt-4 text-center">
+                                        <p>Rs. {{order.items.first.product.price}}</p>
+                                    </div>
+                                    <div class="col-md-4 d-none d-md-block mt-4 text-center">
+                                        {% if order.order_return_requested or order.order_returned %}
+                                        <div class="small fw-bold mb-0 text-danger">order returned</div>
+                                        {% elif order.order_cancelled %}
+                                        <div class="small fw-bold mb-0 text-danger">order cancelled</div>
+                                        {% elif order.order_delivered %}
+                                        <div class="small fw-bold mb-0 text-success">order delivered</div>
+                                        {% elif order.order_expected_delivery_date %}
+                                        <p class="mb-0">expected delivery: {{order.order_expected_delivery_date}}</p>
+                                        {% elif order.order_recieved == True and order.order_expected_delivery_date == null %}
+                                        <p class="mb-0">order recieved</p>
+                                        {% else %}
+                                        <p class="mb-0">processing..</p>
+                                        {% endif %}
+                                    </div>
+                                    <div class="col-8 text-truncate d-block d-md-none mt-3 text-center">
+                                        {% if order.order_return_requested or order.order_returned %}
+                                        <div class="small fw-bold mb-0 text-danger">order returned</div>
+                                        {% elif order.order_cancelled %}
+                                        <div class="small fw-bold mb-0 text-danger">order cancelled</div>
+                                        {% elif order.order_delivered %}
+                                        <div class="small fw-bold mb-0 text-success">order delivered</div>
+                                        {% elif order.order_expected_delivery_date %}
+                                        <div class="small fw-bold mb-0">expected delivery:
+                                            {{order.order_expected_delivery_date}}</div>
+                                        {% elif order.order_recieved == True and order.order_expected_delivery_date == null %}
+                                        <div class="small fw-bold mb-0">order recieved</div>
+                                        {% else %}
+                                        <div class="small fw-bold mb-0">processing..</div>
+                                        {% endif %}
+                                        <p class="mb-0 text-muted">{{order.items.first.product.name}}</p>
+                                    </div>
+                                    <div class="col-md-1 col-1 mt-4 text-center">
+                                        <p><i class="fa-solid fa-angle-right"></i></p>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </a>
+                {% else %}
+
+                {% for item in order.items.all %}
+                <a href="{% url 'userOrderDetail' order.id %}" class="mx-lg-5">
+                    <div class="col-12 w-100">
+                        <div class="card w-100 my-1" style="border-radius: 10px;width: 100%;">
+                            <div class="card-body">
+                                <div class="row">
+                                    <div class="col-md-1 col-3" style="max-height: 100px;">
+                                        <img src="{{item.product.image.url}}" class="img-fluid" alt=""
+                                            style="object-fit: contain;max-height: 80px;" width="100%">
+                                    </div>
+                                    <div class="col-md-3 d-none d-md-block mt-3 text-center">
+                                        <p class="mb-0">{{item.product.name}}</p>
+                                        <p class="text-muted mb-0">{{item.product.brand}}</p>
+                                    </div>
+                                    <div class="col-md-3 d-none d-md-block mt-4 text-center">
+                                        <p>Rs. {{item.get_final_price}}{% if item.quantity > 1 %} (qnty:
+                                            {{item.quantity}}){% endif %}</p>
+                                    </div>
+                                    <div class="col-md-4 d-none d-md-block mt-4 text-center">
+                                        {% if order.order_return_requested or order.order_returned %}
+                                        <div class="small fw-bold mb-0 text-danger">order returned</div>
+                                        {% elif order.order_cancelled %}
+                                        <div class="small fw-bold mb-0 text-danger">order cancelled</div>
+                                        {% elif order.order_delivered %}
+                                        <div class="small fw-bold mb-0 text-success">order delivered</div>
+                                        {% elif order.order_expected_delivery_date %}
+                                        <p class="mb-0">expected delivery: {{order.order_expected_delivery_date}}</p>
+                                        {% elif order.order_recieved == True and order.order_expected_delivery_date == null %}
+                                        <p class="mb-0">order recieved</p>
+                                        {% else %}
+                                        <p class="mb-0">processing..</p>
+                                        {% endif %}
+                                    </div>
+                                    <div class="col-8 text-truncate d-block d-md-none mt-3 text-center">
+                                        {% if order.order_return_requested or order.order_returned %}
+                                        <div class="small fw-bold mb-0 text-danger">order returned</div>
+                                        {% elif order.order_cancelled %}
+                                        <div class="small fw-bold mb-0 text-danger">order cancelled</div>
+                                        {% elif order.order_delivered %}
+                                        <div class="small fw-bold mb-0 text-success">order delivered</div>
+                                        {% elif order.order_expected_delivery_date %}
+                                        <div class="small fw-bold mb-0">expected delivery:
+                                            {{order.order_expected_delivery_date}}</div>
+                                        {% elif order.order_recieved == True and order.order_expected_delivery_date == null %}
+                                        <div class="small fw-bold mb-0">order recieved</div>
+                                        {% else %}
+                                        <div class="small fw-bold mb-0 ">processing..</div>
+                                        {% endif %}
+                                        <p class="mb-0 text-muted">{{item.product.name}}</p>
+                                    </div>
+                                    <div class="col-md-1 col-1 mt-4 text-center">
+                                        <p><i class="fa-solid fa-angle-right"></i></p>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </a>
+                {% endfor %}
+                {% endif %}
+                {% endfor %}
+            </div>
+        </div>
+        {% else %}
+        <div class="text-center w-100 py-3" style="width: 100%;font-family: sans-serif;">
+            <img src="{% static 'images/empty-orders.jpg' %}" alt="" style="object-fit:contain;" width="100%"
+                height="400px">
+            <h2 class="fw-bold">NO ORDERS FOUND</h2>
+            <a href="{% url 'index' %}" class="btn btn-dark fw-bold px-5">explore</a>
+        </div>
+        {% endif %}
+    </div>
+</section>
+
+{% if messages %}
+    {% for message in messages %}
+    <div class="position-fixed top-0 end-0 mb-4 my-3 w-100 p-lg-3" id="alertMessages" style="max-width: 30rem;animation: slideTop .5s ease forwards;">
+        <div class="alert alert-dismissible fade show text-center {% if message.tags == 'error' %}alert-danger{% else %}alert-success{% endif %}"
+            role="alert">
+            <h6>{{message}}</h6>
+        </div>
+    </div>
+    {% endfor %}
+    {% endif %}
+
+<script>
+    setTimeout(function () {
+        var alertBox = document.getElementById("alertMessages");
+        alertBox.style.display = "none";
+    }, 5000);
+</script>
+{% endblock %}

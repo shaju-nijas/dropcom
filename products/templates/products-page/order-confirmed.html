@@ -1,0 +1,31 @@
+{% extends 'user-home/base.html' %}
+{% block title %}DROPCOM order confirmed{% endblock %}
+{% block content %}
+
+<style>
+    section {
+        overflow: hidden;
+        min-height: 100vh !important;
+    }
+</style>
+
+<section>
+    <div class="row">
+        <div class="card text-center p-5 vh-100">
+            <div class="card-body p-5">
+                <div class="container">
+                    <h1 class="my-5"><i class="fa-regular fa-circle-check fa-beat fa-2xl text-success mb-5"
+                            style="font-size: 4em;"></i></h1>
+                    <h1 class="mt-lg-5 text-muted">order confirmed</h1>
+                </div>
+                <a href="/" class="mt-3 btn btn-dark rounded">continue shopping</a>
+            </div>
+        </div>
+    </div>
+</section>
+<script>
+    setTimeout(function(){
+        window.location.href='/';
+    },3000);
+</script>
+{% endblock %}

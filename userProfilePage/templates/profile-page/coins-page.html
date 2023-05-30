@@ -1,0 +1,98 @@
+{% extends 'user-home/base.html' %}
+{% block title %}DROPCOM my coins{% endblock %}
+{% block content %}
+
+<style>
+    section {
+        min-height: 100vh !important;
+    }
+</style>
+
+<section>
+    <div class="container p-lg-5 py-3 mb-1">
+        <h2 class="text-primary fw-bold">Coins</h2>
+        <div class="row">
+            <div class="col-lg-5">
+                <div class="card mt-3">
+                    <div class="card-header mb-0">
+                        <h6 class="text-uppercase fw-bold text-muted mb-0">My Coins</h6>
+                    </div>
+                    <div class="card-body text-center my-0">
+                        <div class="row">
+                            <div class="col-lg-5">
+                                <span class="h5 fw-bold"><i
+                                        class="fa-solid fa-coins text-warning me-2 mb-3"></i>{{user.coins}}</span>
+                            </div>
+                            <div class="col-lg-7">
+                                <a href="{% url 'transferCoins' %}" class="btn btn-dark rounded w-100">Transfer to
+                                    wallet</a>
+                                {% if user.coins < 999 %} <small class="small fw-lighter text-danger">* minimum 999
+                                    coins required to
+                                    transfer</small>
+                                    {% endif %}
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="card mb-3 mt-1">
+                    <div class="card-header mb-0">
+                        <h6 class="text-uppercase fw-bold text-muted mb-0">Coin dashboard</h6>
+                    </div>
+                    <div class="card-body my-0">
+                        <p class="fw-bold my-0">1 . <span class="fw-semibold text-success me-2">+ 99</span><span
+                                class="text-dark fw-semibold">recieved via subscription</span></p>
+                        {% for item in coin_dashboard %}
+                        <p class="fw-bold my-0">{{forloop.counter|add:"1"}} . <span
+                                class="fw-semibold text-success me-2">+
+                                {{item.commission}}</span><span
+                                class="text-dark fw-semibold">{{item.commission_title}}</span>
+                            {% if item.failed %}
+                            <span class="text-danger fw-lighter">(failed)</span>
+                            {% elif item.status == False %}
+                            <span class="text-danger fw-lighter">(pending)</span>
+                            {% else %}
+                            <span></span>
+                            {% endif %}
+                        </p>
+                        {% endfor %}
+                    </div>
+                </div>
+            </div>
+            <div class="col-lg-7">
+                <div class="px-3 px-lg-5">
+                    <div class="h5 mt-3 text-capitalize fw-bold">More about coins ..</div>
+                    <p class="my-0"><i class="fa-solid fa-angle-right me-2"></i>1 coin = 1 INR</p>
+                    <p class="my-0"><i class="fa-solid fa-angle-right me-2"></i>You will earn commission in coins when
+                        your level 1 referral friends buy products.</p>
+                    <p class="my-0"><i class="fa-solid fa-angle-right me-2"></i>Coins will be credited after order
+                        delivery.Otherwise it will show as pending..</p>
+                    <p class="my-0"><i class="fa-solid fa-angle-right me-2"></i>If the order is canceled or returned,
+                        the coins will not be credited and will show as failed.</p>
+                    <p class="my-0"><i class="fa-solid fa-angle-right me-2"></i>You can use your coins to buy products,
+                        play games or transfer them to your wallet for withdrawal.</p>
+                    <p class="my-0"><i class="fa-solid fa-angle-right me-2"></i>Minimum 999 coins required to transfer
+                        to wallet.</p>
+                    <p class="my-0"><i class="fa-solid fa-angle-right me-2"></i>After transferring to wallet you can
+                        withdraw it directly to your bank account.</p>
+                </div>
+            </div>
+        </div>
+        {% if messages %}
+        {% for message in messages %}
+        <div class="position-fixed top-0 end-0 mb-4 my-3 w-100" id="alertMessages" style="max-width: 30rem;animation: slideTop .5s ease forwards;">
+            <div class="alert alert-dismissible fade show text-center {% if message.tags == 'error' %}alert-danger{% else %}alert-success{% endif %}"
+                role="alert">
+                <h6>{{message}}</h6>
+            </div>
+        </div>
+        {% endfor %}
+        {% endif %}
+    </div>
+</section>
+<script>
+    setTimeout(function () {
+        var alertBox = document.getElementById("alertMessages");
+        alertBox.style.display = "none";
+    }, 3000);
+</script>
+{% endblock %}
